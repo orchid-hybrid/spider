@@ -1,0 +1,68 @@
+;; c
+(include "runtime.c")
+
+(define ((struct scm) foo ((struct scm) env2498))
+  (declare (struct scm) r0)
+  (declare (struct scm) r1)
+  (declare (struct scm) r2)
+  (declare (struct scm) r6)
+  (declare (struct scm) clor3)
+  (set! clor3 (scm-wrap-fptr scm-make-vector))
+  (set! r1 (make-struct (struct scm) (tag 0) (val.i 2)))
+  (set! r6 (allocate-vector 0))
+  (set! r2 (make-closure g2499 r6))
+  (declare (type scm-fptr) clo4)
+  (declare (struct scm) env5)
+  (set! clo4
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor3 val) v) elt) 0)
+        val)
+      f))
+  (set! env5
+    (array-ref (struct->ref (struct-ref (struct-ref clor3 val) v) elt) 1))
+  (set! r0 (clo4 env5 r1 r2))
+  (return r0))
+
+(define ((struct scm) scm-main ((struct scm) env2498))
+  (declare (struct scm) r7)
+  (declare (struct scm) clor8)
+  (set! clor8 (scm-wrap-fptr foo))
+  (declare (type scm-fptr) clo9)
+  (declare (struct scm) env10)
+  (set! clo9
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor8 val) v) elt) 0)
+        val)
+      f))
+  (set! env10
+    (array-ref (struct->ref (struct-ref (struct-ref clor8 val) v) elt) 1))
+  (set! r7 (clo9 env10))
+  (return r7))
+
+(define ((struct scm) g2499 ((struct scm) env2498) ((struct scm) i))
+  (declare (struct scm) r11)
+  (declare (struct scm) r12)
+  (declare (struct scm) r13)
+  (declare (struct scm) r14)
+  (declare (struct scm) clor15)
+  (set! clor15 (scm-wrap-fptr scm-eq))
+  (set! r13 i)
+  (set! r14 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (declare (type scm-fptr) clo16)
+  (declare (struct scm) env17)
+  (set! clo16
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor15 val) v) elt) 0)
+        val)
+      f))
+  (set! env17
+    (array-ref (struct->ref (struct-ref (struct-ref clor15 val) v) elt) 1))
+  (set! r12 (clo16 env17 r13 r14))
+  (if (scm-extract-truth r12)
+    (begin (set! r11 (make-struct (struct scm) (tag 0) (val.i 105))))
+    (begin (set! r11 (make-struct (struct scm) (tag 0) (val.i 104)))))
+  (return r11))
+

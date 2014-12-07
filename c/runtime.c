@@ -82,7 +82,7 @@ struct scm make_closure(scm_fptr p, struct scm c) {
 }
 
 struct scm scm_wrap_fptr(scm_fptr f) {
-    return make_closure(f, (struct scm){ .tag = 3 });
+    return make_closure(f, (struct scm){ .tag = 2 });
 }
 
 struct scm scm_print(struct scm env, struct scm a) {
@@ -143,13 +143,15 @@ struct scm scm_make_vector(struct scm env, struct scm len, struct scm gen) {
     int n;
     scm_fptr fn;
     struct scm* elt;
+    struct scm envy;
     fn = gen.val.v->elt[0].val.f;
+    envy = gen.val.v->elt[1];
     n = len.val.i;
     v = allocate_vector(n);
     elt = v.val.v->elt;
     j = 0;
     while ((j < n)) {
-        elt[j] = fn(gen, (struct scm){ .tag = 0, .val.i = j });
+        elt[j] = fn(envy, (struct scm){ .tag = 0, .val.i = j });
         j = (j + 1);
     }
     return v;

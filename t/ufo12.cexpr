@@ -1,0 +1,892 @@
+;; c
+(include "runtime.c")
+
+(define ((struct scm) hash ((struct scm) env2498))
+  (declare (struct scm) r0)
+  (set! r0 (make-struct (struct scm) (tag 0) (val.i 35)))
+  (return r0))
+
+(define ((struct scm) space ((struct scm) env2498))
+  (declare (struct scm) r1)
+  (set! r1 (make-struct (struct scm) (tag 0) (val.i 32)))
+  (return r1))
+
+(define ((struct scm) classify ((struct scm) env2498) ((struct scm) chr))
+  (declare (struct scm) r2)
+  (declare (struct scm) r3)
+  (declare (struct scm) r4)
+  (declare (struct scm) r5)
+  (declare (struct scm) clor6)
+  (set! clor6 (scm-wrap-fptr scm-eq))
+  (set! r4 chr)
+  (declare (struct scm) clor9)
+  (set! clor9 (scm-wrap-fptr hash))
+  (declare (type scm-fptr) clo10)
+  (declare (struct scm) env11)
+  (set! clo10
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor9 val) v) elt) 0)
+        val)
+      f))
+  (set! env11
+    (array-ref (struct->ref (struct-ref (struct-ref clor9 val) v) elt) 1))
+  (set! r5 (clo10 env11))
+  (declare (type scm-fptr) clo7)
+  (declare (struct scm) env8)
+  (set! clo7
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor6 val) v) elt) 0)
+        val)
+      f))
+  (set! env8
+    (array-ref (struct->ref (struct-ref (struct-ref clor6 val) v) elt) 1))
+  (set! r3 (clo7 env8 r4 r5))
+  (if (scm-extract-truth r3)
+    (begin (set! r2 (make-struct (struct scm) (tag 0) (val.i 1))))
+    (begin (set! r2 (make-struct (struct scm) (tag 0) (val.i 0)))))
+  (return r2))
+
+(define ((struct scm) not ((struct scm) env2498) ((struct scm) x))
+  (declare (struct scm) r12)
+  (declare (struct scm) r13)
+  (set! r13 x)
+  (if (scm-extract-truth r13)
+    (begin (set! r12 (make-struct (struct scm) (tag 0) (val.i 0))))
+    (begin (set! r12 (make-struct (struct scm) (tag 0) (val.i 1)))))
+  (return r12))
+
+(define ((struct scm)
+         or
+         ((struct scm) env2498)
+         ((struct scm) a)
+         ((struct scm) b))
+  (declare (struct scm) r14)
+  (declare (struct scm) r15)
+  (set! r15 a)
+  (if (scm-extract-truth r15)
+    (begin (set! r14 (make-struct (struct scm) (tag 0) (val.i 1))))
+    (begin (set! r14 b)))
+  (return r14))
+
+(define ((struct scm)
+         rule-30
+         ((struct scm) env2498)
+         ((struct scm) a)
+         ((struct scm) b)
+         ((struct scm) c))
+  (declare (struct scm) r16)
+  (declare (struct scm) r17)
+  (declare (struct scm) r18)
+  (declare (struct scm) r19)
+  (declare (struct scm) r23)
+  (declare (struct scm) r24)
+  (declare (struct scm) r28)
+  (declare (struct scm) r29)
+  (declare (struct scm) r33)
+  (declare (struct scm) r34)
+  (declare (struct scm) r38)
+  (declare (struct scm) r39)
+  (set! r18 a)
+  (if (scm-extract-truth r18)
+    (begin
+      (declare (struct scm) clor20)
+      (set! clor20 (scm-wrap-fptr not))
+      (declare (struct scm) clor25)
+      (set! clor25 (scm-wrap-fptr or))
+      (set! r23 b)
+      (set! r24 c)
+      (declare (type scm-fptr) clo26)
+      (declare (struct scm) env27)
+      (set! clo26
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor25 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env27
+        (array-ref (struct->ref (struct-ref (struct-ref clor25 val) v) elt) 1))
+      (set! r19 (clo26 env27 r23 r24))
+      (declare (type scm-fptr) clo21)
+      (declare (struct scm) env22)
+      (set! clo21
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor20 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env22
+        (array-ref (struct->ref (struct-ref (struct-ref clor20 val) v) elt) 1))
+      (set! r17 (clo21 env22 r19)))
+    (begin
+      (set! r28 b)
+      (if (scm-extract-truth r28)
+        (begin
+          (declare (struct scm) clor30)
+          (set! clor30 (scm-wrap-fptr not))
+          (set! r29 a)
+          (declare (type scm-fptr) clo31)
+          (declare (struct scm) env32)
+          (set! clo31
+            (struct-ref
+              (struct-ref
+                (array-ref
+                  (struct->ref (struct-ref (struct-ref clor30 val) v) elt)
+                  0)
+                val)
+              f))
+          (set! env32
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor30 val) v) elt)
+              1))
+          (set! r17 (clo31 env32 r29)))
+        (begin
+          (set! r33 c)
+          (if (scm-extract-truth r33)
+            (begin
+              (declare (struct scm) clor35)
+              (set! clor35 (scm-wrap-fptr not))
+              (declare (struct scm) clor40)
+              (set! clor40 (scm-wrap-fptr or))
+              (set! r38 a)
+              (set! r39 b)
+              (declare (type scm-fptr) clo41)
+              (declare (struct scm) env42)
+              (set! clo41
+                (struct-ref
+                  (struct-ref
+                    (array-ref
+                      (struct->ref (struct-ref (struct-ref clor40 val) v) elt)
+                      0)
+                    val)
+                  f))
+              (set! env42
+                (array-ref
+                  (struct->ref (struct-ref (struct-ref clor40 val) v) elt)
+                  1))
+              (set! r34 (clo41 env42 r38 r39))
+              (declare (type scm-fptr) clo36)
+              (declare (struct scm) env37)
+              (set! clo36
+                (struct-ref
+                  (struct-ref
+                    (array-ref
+                      (struct->ref (struct-ref (struct-ref clor35 val) v) elt)
+                      0)
+                    val)
+                  f))
+              (set! env37
+                (array-ref
+                  (struct->ref (struct-ref (struct-ref clor35 val) v) elt)
+                  1))
+              (set! r17 (clo36 env37 r34)))
+            (begin
+              (set! r17 (make-struct (struct scm) (tag 0) (val.i 0)))))))))
+  (if (scm-extract-truth r17)
+    (begin
+      (declare (struct scm) clor43)
+      (set! clor43 (scm-wrap-fptr hash))
+      (declare (type scm-fptr) clo44)
+      (declare (struct scm) env45)
+      (set! clo44
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor43 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env45
+        (array-ref (struct->ref (struct-ref (struct-ref clor43 val) v) elt) 1))
+      (set! r16 (clo44 env45)))
+    (begin
+      (declare (struct scm) clor46)
+      (set! clor46 (scm-wrap-fptr space))
+      (declare (type scm-fptr) clo47)
+      (declare (struct scm) env48)
+      (set! clo47
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor46 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env48
+        (array-ref (struct->ref (struct-ref (struct-ref clor46 val) v) elt) 1))
+      (set! r16 (clo47 env48))))
+  (return r16))
+
+(define ((struct scm)
+         next
+         ((struct scm) env2498)
+         ((struct scm) vec)
+         ((struct scm) len))
+  (declare (struct scm) r49)
+  (declare (struct scm) r50)
+  (declare (struct scm) r51)
+  (declare (struct scm) r52)
+  (set! r51 len)
+  (set! r52 vec)
+  (set! r50 (allocate-vector 2))
+  (scm-vector-insert! r50 r51 0)
+  (scm-vector-insert! r50 r52 1)
+  (set! r49 (make-closure g2499 r50))
+  (return r49))
+
+(define ((struct scm) size ((struct scm) env2498))
+  (declare (struct scm) r53)
+  (set! r53 (make-struct (struct scm) (tag 0) (val.i 60)))
+  (return r53))
+
+(define ((struct scm) initial-condition ((struct scm) env2498))
+  (declare (struct scm) r54)
+  (declare (struct scm) r55)
+  (declare (struct scm) r56)
+  (declare (struct scm) r63)
+  (declare (struct scm) clor57)
+  (set! clor57 (scm-wrap-fptr scm-make-vector))
+  (declare (struct scm) clor60)
+  (set! clor60 (scm-wrap-fptr size))
+  (declare (type scm-fptr) clo61)
+  (declare (struct scm) env62)
+  (set! clo61
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor60 val) v) elt) 0)
+        val)
+      f))
+  (set! env62
+    (array-ref (struct->ref (struct-ref (struct-ref clor60 val) v) elt) 1))
+  (set! r55 (clo61 env62))
+  (set! r63 (allocate-vector 0))
+  (set! r56 (make-closure g2500 r63))
+  (declare (type scm-fptr) clo58)
+  (declare (struct scm) env59)
+  (set! clo58
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor57 val) v) elt) 0)
+        val)
+      f))
+  (set! env59
+    (array-ref (struct->ref (struct-ref (struct-ref clor57 val) v) elt) 1))
+  (set! r54 (clo58 env59 r55 r56))
+  (return r54))
+
+(define ((struct scm)
+         begin
+         ((struct scm) env2498)
+         ((struct scm) x)
+         ((struct scm) y))
+  (declare (struct scm) r64)
+  (set! r64 y)
+  (return r64))
+
+(define ((struct scm) print-line ((struct scm) env2498) ((struct scm) l))
+  (declare (struct scm) r65)
+  (declare (struct scm) r66)
+  (declare (struct scm) r67)
+  (declare (struct scm) r71)
+  (declare (struct scm) r75)
+  (declare (struct scm) clor68)
+  (set! clor68 (scm-wrap-fptr begin))
+  (declare (struct scm) clor72)
+  (set! clor72 (scm-wrap-fptr scm-print))
+  (set! r71 l)
+  (declare (type scm-fptr) clo73)
+  (declare (struct scm) env74)
+  (set! clo73
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor72 val) v) elt) 0)
+        val)
+      f))
+  (set! env74
+    (array-ref (struct->ref (struct-ref (struct-ref clor72 val) v) elt) 1))
+  (set! r66 (clo73 env74 r71))
+  (declare (struct scm) clor76)
+  (set! clor76 (scm-wrap-fptr scm-print))
+  (set! r75 (scm-string-to-vector "\n"))
+  (declare (type scm-fptr) clo77)
+  (declare (struct scm) env78)
+  (set! clo77
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor76 val) v) elt) 0)
+        val)
+      f))
+  (set! env78
+    (array-ref (struct->ref (struct-ref (struct-ref clor76 val) v) elt) 1))
+  (set! r67 (clo77 env78 r75))
+  (declare (type scm-fptr) clo69)
+  (declare (struct scm) env70)
+  (set! clo69
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor68 val) v) elt) 0)
+        val)
+      f))
+  (set! env70
+    (array-ref (struct->ref (struct-ref (struct-ref clor68 val) v) elt) 1))
+  (set! r65 (clo69 env70 r66 r67))
+  (return r65))
+
+(define ((struct scm)
+         do-times
+         ((struct scm) env2498)
+         ((struct scm) n)
+         ((struct scm) state))
+  (declare (struct scm) r79)
+  (declare (struct scm) r80)
+  (declare (struct scm) r81)
+  (declare (struct scm) r85)
+  (declare (struct scm) r89)
+  (declare (struct scm) r90)
+  (declare (struct scm) r91)
+  (declare (struct scm) r95)
+  (declare (struct scm) r96)
+  (declare (struct scm) r100)
+  (declare (struct scm) r101)
+  (declare (struct scm) r105)
+  (declare (struct scm) r106)
+  (declare (struct scm) r113)
+  (declare (struct scm) r114)
+  (declare (struct scm) clor82)
+  (set! clor82 (scm-wrap-fptr begin))
+  (declare (struct scm) clor86)
+  (set! clor86 (scm-wrap-fptr print-line))
+  (set! r85 state)
+  (declare (type scm-fptr) clo87)
+  (declare (struct scm) env88)
+  (set! clo87
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor86 val) v) elt) 0)
+        val)
+      f))
+  (set! env88
+    (array-ref (struct->ref (struct-ref (struct-ref clor86 val) v) elt) 1))
+  (set! r80 (clo87 env88 r85))
+  (declare (struct scm) clor92)
+  (set! clor92 (scm-wrap-fptr scm-eq))
+  (set! r90 n)
+  (set! r91 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (declare (type scm-fptr) clo93)
+  (declare (struct scm) env94)
+  (set! clo93
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor92 val) v) elt) 0)
+        val)
+      f))
+  (set! env94
+    (array-ref (struct->ref (struct-ref (struct-ref clor92 val) v) elt) 1))
+  (set! r89 (clo93 env94 r90 r91))
+  (if (scm-extract-truth r89)
+    (begin (set! r81 (make-struct (struct scm) (tag 0) (val.i 0))))
+    (begin
+      (declare (struct scm) clor97)
+      (set! clor97 (scm-wrap-fptr do-times))
+      (declare (struct scm) clor102)
+      (set! clor102 (scm-wrap-fptr scm-minus))
+      (set! r100 n)
+      (set! r101 (make-struct (struct scm) (tag 0) (val.i 1)))
+      (declare (type scm-fptr) clo103)
+      (declare (struct scm) env104)
+      (set! clo103
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor102 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env104
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor102 val) v) elt)
+          1))
+      (set! r95 (clo103 env104 r100 r101))
+      (declare (struct scm) clor107)
+      (set! clor107 (scm-wrap-fptr scm-make-vector))
+      (declare (struct scm) clor110)
+      (set! clor110 (scm-wrap-fptr size))
+      (declare (type scm-fptr) clo111)
+      (declare (struct scm) env112)
+      (set! clo111
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor110 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env112
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor110 val) v) elt)
+          1))
+      (set! r105 (clo111 env112))
+      (declare (struct scm) clor115)
+      (set! clor115 (scm-wrap-fptr next))
+      (set! r113 state)
+      (declare (struct scm) clor118)
+      (set! clor118 (scm-wrap-fptr size))
+      (declare (type scm-fptr) clo119)
+      (declare (struct scm) env120)
+      (set! clo119
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor118 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env120
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor118 val) v) elt)
+          1))
+      (set! r114 (clo119 env120))
+      (declare (type scm-fptr) clo116)
+      (declare (struct scm) env117)
+      (set! clo116
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor115 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env117
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor115 val) v) elt)
+          1))
+      (set! r106 (clo116 env117 r113 r114))
+      (declare (type scm-fptr) clo108)
+      (declare (struct scm) env109)
+      (set! clo108
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor107 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env109
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor107 val) v) elt)
+          1))
+      (set! r96 (clo108 env109 r105 r106))
+      (declare (type scm-fptr) clo98)
+      (declare (struct scm) env99)
+      (set! clo98
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor97 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env99
+        (array-ref (struct->ref (struct-ref (struct-ref clor97 val) v) elt) 1))
+      (set! r81 (clo98 env99 r95 r96))))
+  (declare (type scm-fptr) clo83)
+  (declare (struct scm) env84)
+  (set! clo83
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor82 val) v) elt) 0)
+        val)
+      f))
+  (set! env84
+    (array-ref (struct->ref (struct-ref (struct-ref clor82 val) v) elt) 1))
+  (set! r79 (clo83 env84 r80 r81))
+  (return r79))
+
+(define ((struct scm) scm-main ((struct scm) env2498))
+  (declare (struct scm) r121)
+  (declare (struct scm) r122)
+  (declare (struct scm) r123)
+  (declare (struct scm) clor124)
+  (set! clor124 (scm-wrap-fptr do-times))
+  (declare (struct scm) clor127)
+  (set! clor127 (scm-wrap-fptr size))
+  (declare (type scm-fptr) clo128)
+  (declare (struct scm) env129)
+  (set! clo128
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor127 val) v) elt) 0)
+        val)
+      f))
+  (set! env129
+    (array-ref (struct->ref (struct-ref (struct-ref clor127 val) v) elt) 1))
+  (set! r122 (clo128 env129))
+  (declare (struct scm) clor130)
+  (set! clor130 (scm-wrap-fptr initial-condition))
+  (declare (type scm-fptr) clo131)
+  (declare (struct scm) env132)
+  (set! clo131
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor130 val) v) elt) 0)
+        val)
+      f))
+  (set! env132
+    (array-ref (struct->ref (struct-ref (struct-ref clor130 val) v) elt) 1))
+  (set! r123 (clo131 env132))
+  (declare (type scm-fptr) clo125)
+  (declare (struct scm) env126)
+  (set! clo125
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor124 val) v) elt) 0)
+        val)
+      f))
+  (set! env126
+    (array-ref (struct->ref (struct-ref (struct-ref clor124 val) v) elt) 1))
+  (set! r121 (clo125 env126 r122 r123))
+  (return r121))
+
+(define ((struct scm) g2500 ((struct scm) env2498) ((struct scm) i))
+  (declare (struct scm) r133)
+  (declare (struct scm) r134)
+  (declare (struct scm) r135)
+  (declare (struct scm) r136)
+  (declare (struct scm) r140)
+  (declare (struct scm) r141)
+  (declare (struct scm) clor137)
+  (set! clor137 (scm-wrap-fptr scm-eq))
+  (set! r135 i)
+  (declare (struct scm) clor142)
+  (set! clor142 (scm-wrap-fptr scm-divide))
+  (declare (struct scm) clor145)
+  (set! clor145 (scm-wrap-fptr size))
+  (declare (type scm-fptr) clo146)
+  (declare (struct scm) env147)
+  (set! clo146
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor145 val) v) elt) 0)
+        val)
+      f))
+  (set! env147
+    (array-ref (struct->ref (struct-ref (struct-ref clor145 val) v) elt) 1))
+  (set! r140 (clo146 env147))
+  (set! r141 (make-struct (struct scm) (tag 0) (val.i 2)))
+  (declare (type scm-fptr) clo143)
+  (declare (struct scm) env144)
+  (set! clo143
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor142 val) v) elt) 0)
+        val)
+      f))
+  (set! env144
+    (array-ref (struct->ref (struct-ref (struct-ref clor142 val) v) elt) 1))
+  (set! r136 (clo143 env144 r140 r141))
+  (declare (type scm-fptr) clo138)
+  (declare (struct scm) env139)
+  (set! clo138
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor137 val) v) elt) 0)
+        val)
+      f))
+  (set! env139
+    (array-ref (struct->ref (struct-ref (struct-ref clor137 val) v) elt) 1))
+  (set! r134 (clo138 env139 r135 r136))
+  (if (scm-extract-truth r134)
+    (begin
+      (declare (struct scm) clor148)
+      (set! clor148 (scm-wrap-fptr hash))
+      (declare (type scm-fptr) clo149)
+      (declare (struct scm) env150)
+      (set! clo149
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor148 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env150
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor148 val) v) elt)
+          1))
+      (set! r133 (clo149 env150)))
+    (begin
+      (declare (struct scm) clor151)
+      (set! clor151 (scm-wrap-fptr space))
+      (declare (type scm-fptr) clo152)
+      (declare (struct scm) env153)
+      (set! clo152
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor151 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env153
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor151 val) v) elt)
+          1))
+      (set! r133 (clo152 env153))))
+  (return r133))
+
+(define ((struct scm) g2499 ((struct scm) env2498) ((struct scm) i))
+  (declare (struct scm) r154)
+  (declare (struct scm) r155)
+  (declare (struct scm) r156)
+  (declare (struct scm) r157)
+  (declare (struct scm) r161)
+  (declare (struct scm) r162)
+  (declare (struct scm) r163)
+  (declare (struct scm) r167)
+  (declare (struct scm) r171)
+  (declare (struct scm) r172)
+  (declare (struct scm) r176)
+  (declare (struct scm) r177)
+  (declare (struct scm) r178)
+  (declare (struct scm) r179)
+  (declare (struct scm) r180)
+  (declare (struct scm) r184)
+  (declare (struct scm) r188)
+  (declare (struct scm) r189)
+  (declare (struct scm) r193)
+  (declare (struct scm) r194)
+  (declare (struct scm) r195)
+  (declare (struct scm) r196)
+  (declare (struct scm) r197)
+  (declare (struct scm) r198)
+  (declare (struct scm) r202)
+  (declare (struct scm) r203)
+  (declare (struct scm) r207)
+  (declare (struct scm) r208)
+  (declare (struct scm) r209)
+  (declare (struct scm) r210)
+  (declare (struct scm) r214)
+  (declare (struct scm) r215)
+  (declare (struct scm) r219)
+  (declare (struct scm) r220)
+  (declare (struct scm) r221)
+  (declare (struct scm) r222)
+  (declare (struct scm) r223)
+  (declare (struct scm) clor158)
+  (set! clor158 (scm-wrap-fptr rule-30))
+  (declare (struct scm) clor164)
+  (set! clor164 (scm-wrap-fptr scm-eq))
+  (set! r162 i)
+  (set! r163 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (declare (type scm-fptr) clo165)
+  (declare (struct scm) env166)
+  (set! clo165
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor164 val) v) elt) 0)
+        val)
+      f))
+  (set! env166
+    (array-ref (struct->ref (struct-ref (struct-ref clor164 val) v) elt) 1))
+  (set! r161 (clo165 env166 r162 r163))
+  (if (scm-extract-truth r161)
+    (begin (set! r155 (make-struct (struct scm) (tag 0) (val.i 0))))
+    (begin
+      (declare (struct scm) clor168)
+      (set! clor168 (scm-wrap-fptr classify))
+      (declare (struct scm) clor173)
+      (set! clor173 (scm-wrap-fptr scm-vector-ref))
+      (set! r176 (make-struct (struct scm) (tag 0) (val.i 0)))
+      (set! r177 env2498)
+      (set! r178 (make-struct (struct scm) (tag 0) (val.i 1)))
+      (set! r171 (scm-vector-ref r176 r177 r178))
+      (declare (struct scm) clor181)
+      (set! clor181 (scm-wrap-fptr scm-minus))
+      (set! r179 i)
+      (set! r180 (make-struct (struct scm) (tag 0) (val.i 1)))
+      (declare (type scm-fptr) clo182)
+      (declare (struct scm) env183)
+      (set! clo182
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor181 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env183
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor181 val) v) elt)
+          1))
+      (set! r172 (clo182 env183 r179 r180))
+      (declare (type scm-fptr) clo174)
+      (declare (struct scm) env175)
+      (set! clo174
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor173 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env175
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor173 val) v) elt)
+          1))
+      (set! r167 (clo174 env175 r171 r172))
+      (declare (type scm-fptr) clo169)
+      (declare (struct scm) env170)
+      (set! clo169
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor168 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env170
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor168 val) v) elt)
+          1))
+      (set! r155 (clo169 env170 r167))))
+  (declare (struct scm) clor185)
+  (set! clor185 (scm-wrap-fptr classify))
+  (declare (struct scm) clor190)
+  (set! clor190 (scm-wrap-fptr scm-vector-ref))
+  (set! r193 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (set! r194 env2498)
+  (set! r195 (make-struct (struct scm) (tag 0) (val.i 1)))
+  (set! r188 (scm-vector-ref r193 r194 r195))
+  (set! r189 i)
+  (declare (type scm-fptr) clo191)
+  (declare (struct scm) env192)
+  (set! clo191
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor190 val) v) elt) 0)
+        val)
+      f))
+  (set! env192
+    (array-ref (struct->ref (struct-ref (struct-ref clor190 val) v) elt) 1))
+  (set! r184 (clo191 env192 r188 r189))
+  (declare (type scm-fptr) clo186)
+  (declare (struct scm) env187)
+  (set! clo186
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor185 val) v) elt) 0)
+        val)
+      f))
+  (set! env187
+    (array-ref (struct->ref (struct-ref (struct-ref clor185 val) v) elt) 1))
+  (set! r156 (clo186 env187 r184))
+  (declare (struct scm) clor199)
+  (set! clor199 (scm-wrap-fptr scm-eq))
+  (set! r197 i)
+  (declare (struct scm) clor204)
+  (set! clor204 (scm-wrap-fptr scm-minus))
+  (set! r207 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (set! r208 env2498)
+  (set! r209 (make-struct (struct scm) (tag 0) (val.i 0)))
+  (set! r202 (scm-vector-ref r207 r208 r209))
+  (set! r203 (make-struct (struct scm) (tag 0) (val.i 1)))
+  (declare (type scm-fptr) clo205)
+  (declare (struct scm) env206)
+  (set! clo205
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor204 val) v) elt) 0)
+        val)
+      f))
+  (set! env206
+    (array-ref (struct->ref (struct-ref (struct-ref clor204 val) v) elt) 1))
+  (set! r198 (clo205 env206 r202 r203))
+  (declare (type scm-fptr) clo200)
+  (declare (struct scm) env201)
+  (set! clo200
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor199 val) v) elt) 0)
+        val)
+      f))
+  (set! env201
+    (array-ref (struct->ref (struct-ref (struct-ref clor199 val) v) elt) 1))
+  (set! r196 (clo200 env201 r197 r198))
+  (if (scm-extract-truth r196)
+    (begin (set! r157 (make-struct (struct scm) (tag 0) (val.i 0))))
+    (begin
+      (declare (struct scm) clor211)
+      (set! clor211 (scm-wrap-fptr classify))
+      (declare (struct scm) clor216)
+      (set! clor216 (scm-wrap-fptr scm-vector-ref))
+      (set! r219 (make-struct (struct scm) (tag 0) (val.i 0)))
+      (set! r220 env2498)
+      (set! r221 (make-struct (struct scm) (tag 0) (val.i 1)))
+      (set! r214 (scm-vector-ref r219 r220 r221))
+      (declare (struct scm) clor224)
+      (set! clor224 (scm-wrap-fptr scm-plus))
+      (set! r222 i)
+      (set! r223 (make-struct (struct scm) (tag 0) (val.i 1)))
+      (declare (type scm-fptr) clo225)
+      (declare (struct scm) env226)
+      (set! clo225
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor224 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env226
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor224 val) v) elt)
+          1))
+      (set! r215 (clo225 env226 r222 r223))
+      (declare (type scm-fptr) clo217)
+      (declare (struct scm) env218)
+      (set! clo217
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor216 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env218
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor216 val) v) elt)
+          1))
+      (set! r210 (clo217 env218 r214 r215))
+      (declare (type scm-fptr) clo212)
+      (declare (struct scm) env213)
+      (set! clo212
+        (struct-ref
+          (struct-ref
+            (array-ref
+              (struct->ref (struct-ref (struct-ref clor211 val) v) elt)
+              0)
+            val)
+          f))
+      (set! env213
+        (array-ref
+          (struct->ref (struct-ref (struct-ref clor211 val) v) elt)
+          1))
+      (set! r157 (clo212 env213 r210))))
+  (declare (type scm-fptr) clo159)
+  (declare (struct scm) env160)
+  (set! clo159
+    (struct-ref
+      (struct-ref
+        (array-ref (struct->ref (struct-ref (struct-ref clor158 val) v) elt) 0)
+        val)
+      f))
+  (set! env160
+    (array-ref (struct->ref (struct-ref (struct-ref clor158 val) v) elt) 1))
+  (set! r154 (clo159 env160 r155 r156 r157))
+  (return r154))
+

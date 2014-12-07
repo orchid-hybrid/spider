@@ -20,6 +20,7 @@
      (cond ((symbol? e) e)
            ((string? e) `(scm-string-to-vector ,e))
            ((number? e) `(make-struct (struct scm) (tag 0) (val.i ,e)))
+           ((char? e) `(make-struct (struct scm) (tag 0) (val.i ,(char->integer e))))
            (else (error e))))
     ))
 

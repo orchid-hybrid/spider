@@ -105,7 +105,7 @@
   )
 
 (define ((struct scm) scm-wrap-fptr ((type scm-fptr) f))
-  (return (make-closure f (make-struct (struct scm) (tag 3)))))
+  (return (make-closure f (make-struct (struct scm) (tag 2)))))
 
 
 (define ((struct scm) scm-print ((struct scm) env) ((struct scm) a))
@@ -162,13 +162,15 @@
   (declare int n)
   (declare (type scm-fptr) fn)
   (declare (* (struct scm)) elt)
+  (declare (struct scm) envy)
   (set! fn (struct-ref (struct-ref (array-ref (struct->ref (struct-ref (struct-ref gen val) v) elt) 0) val) f))
+  (set! envy (array-ref (struct->ref (struct-ref (struct-ref gen val) v) elt) 1))
   (set! n (struct-ref (struct-ref len val) i))
   (set! v (allocate-vector n))
   (set! elt (struct->ref (struct-ref (struct-ref v val) v) elt))
   (set! j 0)
   (while (< j n)
-         (set! (array-ref elt j) (fn gen (make-struct (struct scm) (tag 0) (val.i j))))
+         (set! (array-ref elt j) (fn envy (make-struct (struct scm) (tag 0) (val.i j))))
          (set! j (+ j 1)))
   ;;(refcount-dec gen)
   (return v))
