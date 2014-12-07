@@ -19,7 +19,7 @@ This is supposed to work as a backend for NieA. It should be possible to compile
 * ufo9 works
 * ufo10 works!
 * ufo11 works
-* ufo12 fails
+* ufo12 works!!
 
 Goal:
 
