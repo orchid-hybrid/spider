@@ -1,0 +1,155 @@
+#include "runtime.c"
+struct scm begin(struct scm, struct scm, struct scm);
+struct scm go(struct scm, struct scm);
+struct scm scm_main(struct scm);
+
+struct scm begin(struct scm env2498, struct scm a, struct scm b) {
+    struct scm r0;
+    r0 = b;
+    return r0;
+}
+
+struct scm go(struct scm env2498, struct scm n) {
+    struct scm r1;
+    struct scm r2;
+    struct scm r3;
+    struct scm r7;
+    struct scm r8;
+    r2 = n;
+    if (scm_extract_truth(r2)) {
+        struct scm clor4;
+        clor4 = scm_wrap_fptr(go);
+        struct scm clor9;
+        clor9 = scm_wrap_fptr(scm_minus);
+        r7 = n;
+        r8 = (struct scm){ .tag = 0, .val.i = 1 };
+        scm_fptr clo10;
+        struct scm env11;
+        clo10 = clor9.val.v->elt[0].val.f;
+        env11 = clor9.val.v->elt[1];
+        r3 = clo10(env11, r7, r8);
+        scm_fptr clo5;
+        struct scm env6;
+        clo5 = clor4.val.v->elt[0].val.f;
+        env6 = clor4.val.v->elt[1];
+        r1 = clo5(env6, r3);
+    } else {
+        r1 = (struct scm){ .tag = 0, .val.i = 0 };
+    }
+    return r1;
+}
+
+struct scm scm_main(struct scm env2498) {
+    struct scm r12;
+    struct scm r13;
+    struct scm r14;
+    struct scm r18;
+    struct scm r22;
+    struct scm r23;
+    struct scm r27;
+    struct scm r31;
+    struct scm r32;
+    struct scm r36;
+    struct scm r40;
+    struct scm r41;
+    struct scm r45;
+    struct scm r49;
+    struct scm r50;
+    struct scm r54;
+    struct scm r58;
+    struct scm r59;
+    struct scm r63;
+    struct scm clor15;
+    clor15 = scm_wrap_fptr(begin);
+    struct scm clor19;
+    clor19 = scm_wrap_fptr(go);
+    r18 = (struct scm){ .tag = 0, .val.i = 10 };
+    scm_fptr clo20;
+    struct scm env21;
+    clo20 = clor19.val.v->elt[0].val.f;
+    env21 = clor19.val.v->elt[1];
+    r13 = clo20(env21, r18);
+    struct scm clor24;
+    clor24 = scm_wrap_fptr(begin);
+    struct scm clor28;
+    clor28 = scm_wrap_fptr(go);
+    r27 = (struct scm){ .tag = 0, .val.i = 50 };
+    scm_fptr clo29;
+    struct scm env30;
+    clo29 = clor28.val.v->elt[0].val.f;
+    env30 = clor28.val.v->elt[1];
+    r22 = clo29(env30, r27);
+    struct scm clor33;
+    clor33 = scm_wrap_fptr(begin);
+    struct scm clor37;
+    clor37 = scm_wrap_fptr(go);
+    r36 = (struct scm){ .tag = 0, .val.i = 100 };
+    scm_fptr clo38;
+    struct scm env39;
+    clo38 = clor37.val.v->elt[0].val.f;
+    env39 = clor37.val.v->elt[1];
+    r31 = clo38(env39, r36);
+    struct scm clor42;
+    clor42 = scm_wrap_fptr(begin);
+    struct scm clor46;
+    clor46 = scm_wrap_fptr(go);
+    r45 = (struct scm){ .tag = 0, .val.i = 10 };
+    scm_fptr clo47;
+    struct scm env48;
+    clo47 = clor46.val.v->elt[0].val.f;
+    env48 = clor46.val.v->elt[1];
+    r40 = clo47(env48, r45);
+    struct scm clor51;
+    clor51 = scm_wrap_fptr(begin);
+    struct scm clor55;
+    clor55 = scm_wrap_fptr(go);
+    r54 = (struct scm){ .tag = 0, .val.i = 10 };
+    scm_fptr clo56;
+    struct scm env57;
+    clo56 = clor55.val.v->elt[0].val.f;
+    env57 = clor55.val.v->elt[1];
+    r49 = clo56(env57, r54);
+    struct scm clor60;
+    clor60 = scm_wrap_fptr(begin);
+    struct scm clor64;
+    clor64 = scm_wrap_fptr(go);
+    r63 = (struct scm){ .tag = 0, .val.i = 20 };
+    scm_fptr clo65;
+    struct scm env66;
+    clo65 = clor64.val.v->elt[0].val.f;
+    env66 = clor64.val.v->elt[1];
+    r58 = clo65(env66, r63);
+    r59 = (struct scm){ .tag = 0, .val.i = 0 };
+    scm_fptr clo61;
+    struct scm env62;
+    clo61 = clor60.val.v->elt[0].val.f;
+    env62 = clor60.val.v->elt[1];
+    r50 = clo61(env62, r58, r59);
+    scm_fptr clo52;
+    struct scm env53;
+    clo52 = clor51.val.v->elt[0].val.f;
+    env53 = clor51.val.v->elt[1];
+    r41 = clo52(env53, r49, r50);
+    scm_fptr clo43;
+    struct scm env44;
+    clo43 = clor42.val.v->elt[0].val.f;
+    env44 = clor42.val.v->elt[1];
+    r32 = clo43(env44, r40, r41);
+    scm_fptr clo34;
+    struct scm env35;
+    clo34 = clor33.val.v->elt[0].val.f;
+    env35 = clor33.val.v->elt[1];
+    r23 = clo34(env35, r31, r32);
+    scm_fptr clo25;
+    struct scm env26;
+    clo25 = clor24.val.v->elt[0].val.f;
+    env26 = clor24.val.v->elt[1];
+    r14 = clo25(env26, r22, r23);
+    scm_fptr clo16;
+    struct scm env17;
+    clo16 = clor15.val.v->elt[0].val.f;
+    env17 = clor15.val.v->elt[1];
+    r12 = clo16(env17, r13, r14);
+    return r12;
+}
+

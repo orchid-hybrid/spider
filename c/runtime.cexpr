@@ -25,7 +25,7 @@
   ((union scm-value) val))
 
 (define (void scm-memory-trace)
-        ;; (fprintf stderr "%d %d\n" scm-time scm-memory-used)
+ (fprintf stderr "%d %d\n" scm-time scm-memory-used)
  (return))
 (define (void scm-free (int size) ((* void) p))
  (set! scm-time (+ scm-time 1))
