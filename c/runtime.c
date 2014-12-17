@@ -74,6 +74,7 @@ void refcount_dec(struct scm s) {
                 refcount_dec(v->elt[i]);
             }
             scm_free((sizeof(struct scm) * v->len), v->elt);
+            scm_free(sizeof(struct scm), v);
         } else {
         }
     } else {
@@ -291,6 +292,10 @@ struct scm scm_lteq(struct scm env, struct scm a, struct scm b) {
 }
 
 void main() {
-    scm_main((struct scm){  });
+    int q;
+  struct scm r = scm_main((struct scm){  });
+
+  if(r.tag==2 || r.tag==3) { q = r.val.v->ref; } else { q = 900; }
+  printf("\n\nProgram ends with r@%d and %d\n", q, scm_memory_used);
 }
 

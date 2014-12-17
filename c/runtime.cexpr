@@ -53,6 +53,7 @@
                                (refcount-dec (array-ref (struct->ref v elt) i))
                                )
                         (scm-free (* (sizeof (struct scm)) (struct->ref v len)) (struct->ref v elt))
+                        (scm-free (sizeof (struct scm)) v)
                         ;;; CORRUPT
                         ;;(set! (struct->ref v elt) NULL)
                         ;;(set! (struct->ref v len) 99999)
