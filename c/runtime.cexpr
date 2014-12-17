@@ -102,7 +102,15 @@
 
 (define ((struct scm) scm-wrap-fptr ((type scm-fptr) f))
   ;; REF: returns an object with refcount 1
-  (return (make-closure f (make-struct (struct scm) (tag 2)))))
+  ;;      NOTE: screwed up first time with make-struct tag 2, but no valid pointer
+  ;;            this is a useless allocation, the alternative would be to add a new
+  ;;            type of a known-empty closure
+  (declare (struct scm) k)
+  (set! k (allocate-vector 0))
+  (set! (struct-ref k tag) 2)
+  (return (make-closure f k
+                        ;;(make-struct (struct scm) (tag 2))
+                        )))
 
 (define ((struct scm) scm-print ((struct scm) env) ((struct scm) a))
   ;; REF: destroys env and a

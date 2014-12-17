@@ -115,7 +115,10 @@ struct scm make_closure(scm_fptr p, struct scm c) {
 }
 
 struct scm scm_wrap_fptr(scm_fptr f) {
-    return make_closure(f, (struct scm){ .tag = 2 });
+    struct scm k;
+    k = allocate_vector(0);
+    k.tag = 2;
+    return make_closure(f, k);
 }
 
 struct scm scm_print(struct scm env, struct scm a) {

@@ -4,6 +4,7 @@
 (define ((struct scm) scm-main ((struct scm) env2498))
   (declare (struct scm) r0)
   (declare (struct scm) r1)
+  (refcount-dec env2498)
   (declare (struct scm) clor2)
   (set! clor2 (scm-wrap-fptr scm-print))
   (set! r1 (scm-string-to-vector "Hello world"))

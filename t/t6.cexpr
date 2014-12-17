@@ -6,6 +6,7 @@
   (declare (struct scm) r1)
   (declare (struct scm) r2)
   (declare (struct scm) r6)
+  (refcount-dec env2498)
   (declare (struct scm) clor3)
   (set! clor3 (scm-wrap-fptr scm-make-vector))
   (set! r1 (make-struct (struct scm) (tag 0) (val.i 2)))
@@ -26,6 +27,7 @@
 
 (define ((struct scm) scm-main ((struct scm) env2498))
   (declare (struct scm) r7)
+  (refcount-dec env2498)
   (declare (struct scm) clor8)
   (set! clor8 (scm-wrap-fptr foo))
   (declare (type scm-fptr) clo9)
@@ -46,6 +48,7 @@
   (declare (struct scm) r12)
   (declare (struct scm) r13)
   (declare (struct scm) r14)
+  (refcount-dec env2498)
   (declare (struct scm) clor15)
   (set! clor15 (scm-wrap-fptr scm-eq))
   (set! r13 i)
