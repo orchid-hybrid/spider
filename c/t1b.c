@@ -13,6 +13,7 @@ struct scm scm_main(struct scm env2498) {
     clo3 = clor2.val.v->elt[0].val.f;
     env4 = clor2.val.v->elt[1];
     r0 = clo3(env4, r1);
+    refcount_dec(clor2);
     return r0;
 }
 

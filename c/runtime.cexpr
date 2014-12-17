@@ -49,11 +49,11 @@
              (if (= 0 (struct->ref v ref))
                  (begin (set! i 0)
                         (while (< i (struct->ref v len))
-                               (set! i (+ i 1))
                                (refcount-dec (array-ref (struct->ref v elt) i))
+                               (set! i (+ i 1)) ;; this was causing an error by being above the previous line before!
                                )
                         (scm-free (* (sizeof (struct scm)) (struct->ref v len)) (struct->ref v elt))
-                        (scm-free (sizeof (struct scm)) v)
+                        (scm-free (sizeof (struct scm-vector)) v)
                         ;;; CORRUPT
                         ;;(set! (struct->ref v elt) NULL)
                         ;;(set! (struct->ref v len) 99999)
@@ -82,9 +82,10 @@
 (define (void scm-vector-insert! ((struct scm) vec) ((struct scm) elt) (int idx))
   ;; REF: 'returns vec' (in principle) so doesn't affect its count
   ;;      incs the count of elt since vec now refs it
+  ;;       UPDATED: Don't inc elt, we consume it
   (assert (= (struct-ref vec tag) 2))
   (set! (array-ref (struct->ref (struct-ref (struct-ref vec val) v) elt) idx) elt)
-  (refcount-inc elt 1)
+  ;;  (refcount-inc elt 1)
   )
 
 (define ((struct scm) make-closure ((type scm-fptr) p) ((struct scm) c))
@@ -145,6 +146,7 @@
   ;; REF: decrement all inputs as usual
   ;;      increment the return value, since its an element we took out of 'vec',
   ;;       providing a new reference to
+  ;; NOTE: inc BEFORE dec'ing
   (assert (= (struct-ref vec tag) 2))
   (assert (= (struct-ref idx tag) 0))
   (declare (* (struct scm)) v)
@@ -154,10 +156,10 @@
   (set! i (struct-ref (struct-ref idx val) i))
   (assert (< i (struct->ref (struct-ref (struct-ref vec val) v) len)))
   (set! ret (array-ref v i))
+  (refcount-inc ret 1)
   (refcount-dec env)
   (refcount-dec vec)
   (refcount-dec idx)
-  (refcount-inc ret 1)
   (return ret))
 
 (define ((struct scm) scm-vector-length ((struct scm) env) ((struct scm) vec))
@@ -291,4 +293,6 @@
       (return (make-struct (struct scm) (tag 0) (val.i 0)))))
 
 (define (void main)
-  (scm-main (make-struct (struct scm))))
+;; REF: try to get back down to zero
+        (refcount-dec (scm-main (make-struct (struct scm)))))
+  

@@ -23,6 +23,7 @@
   (set! env8
     (array-ref (struct->ref (struct-ref (struct-ref clor6 val) v) elt) 1))
   (set! clor2 (clo7 env8 r5))
+  (refcount-dec clor6)
   (set! r1 (scm-string-to-vector "a"))
   (declare (type scm-fptr) clo3)
   (declare (struct scm) env4)
@@ -35,6 +36,7 @@
   (set! env4
     (array-ref (struct->ref (struct-ref (struct-ref clor2 val) v) elt) 1))
   (set! r0 (clo3 env4 r1))
+  (refcount-dec clor2)
   (return r0))
 
 (define ((struct scm) g2500 ((struct scm) env2498) ((struct scm) x))
@@ -71,5 +73,6 @@
   (set! env17
     (array-ref (struct->ref (struct-ref (struct-ref clor15 val) v) elt) 1))
   (set! r13 (clo16 env17 r14))
+  (refcount-dec clor15)
   (return r13))
 

@@ -70,11 +70,11 @@ void refcount_dec(struct scm s) {
         if ((0 == v->ref)) {
             i = 0;
             while ((i < v->len)) {
-                i = (i + 1);
                 refcount_dec(v->elt[i]);
+                i = (i + 1);
             }
             scm_free((sizeof(struct scm) * v->len), v->elt);
-            scm_free(sizeof(struct scm), v);
+            scm_free(sizeof(struct scm_vector), v);
         } else {
         }
     } else {
@@ -103,7 +103,6 @@ struct scm allocate_vector(int len) {
 void scm_vector_insert_bang(struct scm vec, struct scm elt, int idx) {
     assert((vec.tag == 2));
     vec.val.v->elt[idx] = elt;
-    refcount_inc(elt, 1);
 }
 
 struct scm make_closure(scm_fptr p, struct scm c) {
@@ -163,10 +162,10 @@ struct scm scm_vector_ref(struct scm env, struct scm vec, struct scm idx) {
     i = idx.val.i;
     assert((i < vec.val.v->len));
     ret = v[i];
+    refcount_inc(ret, 1);
     refcount_dec(env);
     refcount_dec(vec);
     refcount_dec(idx);
-    refcount_inc(ret, 1);
     return ret;
 }
 
@@ -292,10 +291,6 @@ struct scm scm_lteq(struct scm env, struct scm a, struct scm b) {
 }
 
 void main() {
-    int q;
-  struct scm r = scm_main((struct scm){  });
-
-  if(r.tag==2 || r.tag==3) { q = r.val.v->ref; } else { q = 900; }
-  printf("\n\nProgram ends with r@%d and %d\n", q, scm_memory_used);
+    refcount_dec(scm_main((struct scm){  }));
 }
 

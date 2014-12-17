@@ -6,10 +6,14 @@
 
 (define (assignment-form* t r gen-sym)
   (match t
+    ;; REF: begin now decrements inner computed things
+    ;; UPDATED: deleted that and added dec to various things that don't have an 'r'
     (`(begin) => (error "I don't know how to handle empty begin"))
     (`(begin ,x) => (assignment-form* x r gen-sym))
-    (`(begin ,x . ,y) => `(join ,(assignment-form* x #f gen-sym)
-                                ,(assignment-form* `(begin . ,y) r gen-sym)))
+    (`(begin ,x . ,y) => 
+                          ;;let ((rk (gen-sym "r")))
+     `(join (assignment-form* x #f gen-sym)
+            ,(assignment-form* `(begin . ,y) r gen-sym)))
     (`(if ,b ,t ,e) =>
      (let ((b-r (gen-sym "r")))
        `(join ,(assignment-form* b b-r gen-sym)
@@ -22,12 +26,13 @@
          ,(assignment-form* v r2 gen-sym)
          (elt ,(if r
                    `(set! ,r (make-closure ,f ,r2))
-                   `(make-closure ,f ,r2))))))
+                   `(refcount-dec (make-closure ,f ,r2)))))))
     (`(scm-wrap-fptr ,p) =>
      (if r
          `(elt (set! ,r (scm-wrap-fptr ,p)))
-         `(elt (scm-wrap-fptr ,p))))
+         `(elt (refcount-dec (scm-wrap-fptr ,p)))))
     (`(invoke-closure ,clo . ,args) => ;; TODO insert asserts
+     ;; REF: we now dec the closure after invoking it
      (let ((results (map (lambda (_) (gen-sym "r")) args)))
        (let ((clo-r (gensym "clor"))
              (clo-fptr (gensym "clo"))
@@ -43,9 +48,10 @@
                                                                             (array-ref (struct->ref (struct-ref (struct-ref ,clo-r val) v) elt) 0)
                                                                             val) f))))
                                   (elt (direct (set! ,clo-env (array-ref (struct->ref (struct-ref (struct-ref ,clo-r val) v) elt) 1)))))
-                            (elt ,(if r
-                                      `(set! ,r (,clo-fptr ,clo-env . ,results))
-                                      `(,clo-fptr ,clo-env . ,results)))))))))
+                            (join (elt ,(if r
+                                            `(set! ,r (,clo-fptr ,clo-env . ,results))
+                                            `(,clo-fptr ,clo-env . ,results)))
+                                  (elt (refcount-dec ,clo-r)))))))))
     (`(,f . ,args) =>
      (begin (unless (symbol? f) (error (list "Invalid function call with head" f)))
             (let ((results (map (lambda (_) (gen-sym "r")) args)))
@@ -54,7 +60,7 @@
                                 args results))
                      (elt ,(if r
                                `(set! ,r (,f . ,results))
-                               `(,f . ,results)))))))
+                               `(refcount-dec (,f . ,results))))))))
     (else (if (or (symbol? t) (atomic? t))
               (if r
                   `(elt (set! ,r ,t))

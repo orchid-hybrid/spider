@@ -19,5 +19,6 @@
   (set! env4
     (array-ref (struct->ref (struct-ref (struct-ref clor2 val) v) elt) 1))
   (set! r0 (clo3 env4 r1))
+  (refcount-dec clor2)
   (return r0))
 

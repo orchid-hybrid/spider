@@ -19,6 +19,7 @@ struct scm foo(struct scm env2498) {
     clo4 = clor3.val.v->elt[0].val.f;
     env5 = clor3.val.v->elt[1];
     r0 = clo4(env5, r1, r2);
+    refcount_dec(clor3);
     return r0;
 }
 
@@ -32,6 +33,7 @@ struct scm scm_main(struct scm env2498) {
     clo9 = clor8.val.v->elt[0].val.f;
     env10 = clor8.val.v->elt[1];
     r7 = clo9(env10);
+    refcount_dec(clor8);
     return r7;
 }
 
@@ -50,6 +52,7 @@ struct scm g2499(struct scm env2498, struct scm i) {
     clo16 = clor15.val.v->elt[0].val.f;
     env17 = clor15.val.v->elt[1];
     r12 = clo16(env17, r13, r14);
+    refcount_dec(clor15);
     if (scm_extract_truth(r12)) {
         r11 = (struct scm){ .tag = 0, .val.i = 105 };
     } else {

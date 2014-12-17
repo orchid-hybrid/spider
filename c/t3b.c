@@ -19,12 +19,14 @@ struct scm scm_main(struct scm env2498) {
     clo7 = clor6.val.v->elt[0].val.f;
     env8 = clor6.val.v->elt[1];
     clor2 = clo7(env8, r5);
+    refcount_dec(clor6);
     r1 = scm_string_to_vector("a");
     scm_fptr clo3;
     struct scm env4;
     clo3 = clor2.val.v->elt[0].val.f;
     env4 = clor2.val.v->elt[1];
     r0 = clo3(env4, r1);
+    refcount_dec(clor2);
     return r0;
 }
 
@@ -57,6 +59,7 @@ struct scm g2499(struct scm env2498, struct scm y) {
     clo16 = clor15.val.v->elt[0].val.f;
     env17 = clor15.val.v->elt[1];
     r13 = clo16(env17, r14);
+    refcount_dec(clor15);
     return r13;
 }
 
