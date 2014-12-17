@@ -20,24 +20,27 @@
                   content)
         (newline)
         (newline))
-      
-      (display ";; reference counting") (newline)
-      (reference-count-program content)
-      (newline)
-      (newline)
-      
-      ;; (let ((af (assignment-form-program content)))
-      ;;   (when debug
-      ;;     (display ";; assignment form") (newline)
-      ;;     (for-each (lambda (definition) (pretty-print definition) (newline))
-      ;;               af)
-      ;;     (newline)
-      ;;     (newline))
+
+      (when debug
+        (display ";; reference counting") (newline))
+      (let ((content (reference-count-program debug content)))
+        (when debug
+          (newline)
+          (newline))
         
-      ;;   (let ((cf (gen-program af)))
-      ;;     (display ";; c") (newline)
-      ;;     (for-each (lambda (definition) (pretty-print definition) (newline))
-      ;;               cf)))
+        (let ((af (assignment-form-program content)))
+          (when debug
+            (display ";; assignment form") (newline)
+            (for-each (lambda (definition) (pretty-print definition) (newline))
+                      af)
+            (newline)
+            (newline))
+          
+          (let ((cf (gen-program af)))
+            (display ";; c") (newline)
+            (for-each (lambda (definition) (pretty-print definition) (newline))
+                      cf))
+          ))
 
       )))
 

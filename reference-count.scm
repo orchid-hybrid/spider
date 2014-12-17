@@ -42,20 +42,24 @@
                     
                     (error (list "Invalid exp!" t))))))))
 
-(define (reference-count-def d)
+(define (reference-count-def debug d)
   ;;(print "reference-counting definition")
   (match d
     (`(define (,name . ,args) ,body) =>
      (begin (unless (every symbol? (cons name args))
               (error (list "Invalid definition!" d)))
-            (let ((result (reference-count-exp body)))
-              (print name)
-              (print result)
-              (newline)
+            (let ((result (join-symbol-tables (reference-count-exp body)
+                                              (map (lambda (s) (cons s -1))
+                                                   args))))
+              (when debug
+                (print name)
+                (print result)
+                (newline))
+              `(define (,name . ,args) ,result ,body)
               )))
-    (else (error(list "Invalid exp!" d)))))
+    (else (error (list "Invalid exp!" d)))))
 
-(define (reference-count-program p)
-  (for-each reference-count-def p))
+(define (reference-count-program debug p)
+  (map (lambda (p) (reference-count-def debug p)) p))
 
 )

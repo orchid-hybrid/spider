@@ -51,9 +51,16 @@
     (else (list (gen-exp body)))
     ))
 
+(define (gen-reference-count cell)
+  (let ((symbol (car cell))
+        (count (cdr cell)))
+    (cond ((= count -1) (list `(refcount-dec ,symbol)))
+          ((= count 0) '())
+          ((> count 0) (list `(refcount-inc ,symbol ,count))))))
+
 (define (gen-definition definition)
   (match definition
-    (`(define (,name . ,args) ,declarations . ,body) =>
+    (`(define (,name . ,args) ,declarations ,counts . ,body) =>
      (let ((c-args (map (lambda (arg)
                           `((struct scm) ,arg))
                         args)))
@@ -61,7 +68,9 @@
           . ,(append (map (lambda (var)
                             `(declare (struct scm) ,var))
                           declarations)
-                     (concat-map gen-body body)))))
+                     (append
+                      (apply append (map gen-reference-count counts))
+                      (concat-map gen-body body))))))
     (else (error (list "Invalid exp!" definition)))))
 
 (define (gen-program program)

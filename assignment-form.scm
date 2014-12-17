@@ -65,7 +65,7 @@
 
 (define (assignment-form-def d)
   (match d
-    (`(define (,name . ,args) ,body) =>
+    (`(define (,name . ,args) ,counts ,body) =>
      (let* ((collect '())
             (gensym (lambda (seed)
                       (let ((result (gensym seed)))
@@ -77,6 +77,7 @@
                                (elt (return ,r)))))))
          `(define (,name . ,args)
             ,(reverse collect)
+            ,counts
             . ,a-body))))
     (else (error (list "assignment-form: Invalid exp!" d)))))
 

@@ -6,6 +6,8 @@
 void scm_memory_trace();
 void scm_free(int, void*);
 void* scm_malloc(int);
+void refcount_dec(struct scm);
+void refcount_inc(struct scm, int);
 struct scm allocate_vector(int);
 void scm_vector_insert_bang(struct scm, struct scm, int);
 struct scm make_closure(scm_fptr, struct scm);
@@ -42,6 +44,7 @@ struct scm {
     union scm_value val;
 };
 void scm_memory_trace() {
+    fprintf(stderr, "%d %d\n", scm_time, scm_memory_used);
     return;
 }
 
@@ -58,6 +61,35 @@ void* scm_malloc(int size) {
     return malloc(size);
 }
 
+void refcount_dec(struct scm s) {
+    int i;
+    struct scm_vector* v;
+    if (((2 == s.tag) || (3 == s.tag))) {
+        v = s.val.v;
+        v->ref = (v->ref - 1);
+        if ((0 == v->ref)) {
+            i = 0;
+            while ((i < v->len)) {
+                i = (i + 1);
+                refcount_dec(v->elt[i]);
+            }
+            scm_free((sizeof(struct scm) * v->len), v->elt);
+        } else {
+        }
+    } else {
+    }
+}
+
+void refcount_inc(struct scm s, int k) {
+    int i;
+    struct scm_vector* v;
+    if (((2 == s.tag) || (3 == s.tag))) {
+        v = s.val.v;
+        v->ref = (v->ref + k);
+    } else {
+    }
+}
+
 struct scm allocate_vector(int len) {
     struct scm_vector* v;
     v = scm_malloc(sizeof(struct scm_vector));
@@ -70,6 +102,7 @@ struct scm allocate_vector(int len) {
 void scm_vector_insert_bang(struct scm vec, struct scm elt, int idx) {
     assert((vec.tag == 2));
     vec.val.v->elt[idx] = elt;
+    refcount_inc(elt, 1);
 }
 
 struct scm make_closure(scm_fptr p, struct scm c) {
@@ -106,9 +139,13 @@ struct scm scm_print(struct scm env, struct scm a) {
             putchar('?');
         }
     }
+    refcount_dec(env);
+    refcount_dec(a);
+    return (struct scm){ .tag = 0, .val.i = 0 };
 }
 
 int scm_extract_truth(struct scm x) {
+    refcount_dec(x);
     return (!((0 == x.tag)) || !((0 == x.val.i)));
 }
 
@@ -122,6 +159,10 @@ struct scm scm_vector_ref(struct scm env, struct scm vec, struct scm idx) {
     i = idx.val.i;
     assert((i < vec.val.v->len));
     ret = v[i];
+    refcount_dec(env);
+    refcount_dec(vec);
+    refcount_dec(idx);
+    refcount_inc(ret, 1);
     return ret;
 }
 
@@ -132,6 +173,8 @@ struct scm scm_vector_length(struct scm env, struct scm vec) {
     struct scm ret;
     i = vec.val.v->len;
     ret = (struct scm){ .tag = 0, .val.i = i };
+    refcount_dec(env);
+    refcount_dec(vec);
     return ret;
 }
 
@@ -174,28 +217,33 @@ struct scm scm_string_to_vector(char* s) {
 struct scm scm_plus(struct scm env, struct scm a, struct scm b) {
     assert((a.tag == 0));
     assert((b.tag == 0));
+    refcount_dec(env);
     return (struct scm){ .tag = 0, .val.i = (a.val.i + b.val.i) };
 }
 
 struct scm scm_minus(struct scm env, struct scm a, struct scm b) {
     assert((a.tag == 0));
     assert((b.tag == 0));
+    refcount_dec(env);
     return (struct scm){ .tag = 0, .val.i = (a.val.i - b.val.i) };
 }
 
 struct scm scm_multiply(struct scm env, struct scm a, struct scm b) {
     assert((a.tag == 0));
     assert((b.tag == 0));
+    refcount_dec(env);
     return (struct scm){ .tag = 0, .val.i = (a.val.i * b.val.i) };
 }
 
 struct scm scm_divide(struct scm env, struct scm a, struct scm b) {
     assert((a.tag == 0));
     assert((b.tag == 0));
+    refcount_dec(env);
     return (struct scm){ .tag = 0, .val.i = (a.val.i / b.val.i) };
 }
 
 struct scm scm_eq(struct scm env, struct scm a, struct scm b) {
+    refcount_dec(env);
     if (((a.tag == 0) && (b.tag == 0))) {
         return (struct scm){ .tag = 0, .val.i = (a.val.i == b.val.i) };
     } else {
@@ -204,6 +252,7 @@ struct scm scm_eq(struct scm env, struct scm a, struct scm b) {
 }
 
 struct scm scm_gt(struct scm env, struct scm a, struct scm b) {
+    refcount_dec(env);
     if (((a.tag == 0) && (b.tag == 0))) {
         return (struct scm){ .tag = 0, .val.i = (a.val.i > b.val.i) };
     } else {
@@ -212,6 +261,7 @@ struct scm scm_gt(struct scm env, struct scm a, struct scm b) {
 }
 
 struct scm scm_lt(struct scm env, struct scm a, struct scm b) {
+    refcount_dec(env);
     if (((a.tag == 0) && (b.tag == 0))) {
         return (struct scm){ .tag = 0, .val.i = (a.val.i < b.val.i) };
     } else {
@@ -220,6 +270,7 @@ struct scm scm_lt(struct scm env, struct scm a, struct scm b) {
 }
 
 struct scm scm_gteq(struct scm env, struct scm a, struct scm b) {
+    refcount_dec(env);
     if (((a.tag == 0) && (b.tag == 0))) {
         return (struct scm){ .tag = 0, .val.i = (a.val.i >= b.val.i) };
     } else {
@@ -228,6 +279,7 @@ struct scm scm_gteq(struct scm env, struct scm a, struct scm b) {
 }
 
 struct scm scm_lteq(struct scm env, struct scm a, struct scm b) {
+    refcount_dec(env);
     if (((a.tag == 0) && (b.tag == 0))) {
         return (struct scm){ .tag = 0, .val.i = (a.val.i <= b.val.i) };
     } else {
