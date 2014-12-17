@@ -3,6 +3,13 @@
 (import pat)
 (import atomic) (use srfi-1)
 
+;;; special forms (are some just normal functions)
+;; invoke-closure
+;; make-closure
+;; vector [?]
+;; scm-vector-ref [?]
+;; scm-wrap-fptr
+
 (define (verify-exp t)
   (match t
     (`(begin) => (error "empty begin"))

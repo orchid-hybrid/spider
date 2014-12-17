@@ -1,4 +1,4 @@
-SOURCES=pat.scm sequence.scm atomic.scm verify.scm assignment-form.scm codegen.scm
+SOURCES=pat.scm sequence.scm atomic.scm symbol-table.scm verify.scm reference-count.scm assignment-form.scm codegen.scm
 OBJECTS=$(SOURCES:.scm=.so)
 
 all: $(OBJECTS)

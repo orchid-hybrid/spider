@@ -7,7 +7,7 @@
 (module spider (main)
 (import chicken scheme)
 (use extras)
-(use pat verify assignment-form codegen)
+(use pat verify reference-count assignment-form codegen)
 
 
 (define (main debug)
@@ -20,21 +20,26 @@
                   content)
         (newline)
         (newline))
-
-
-      (let ((af (assignment-form-program content)))
-        (when debug
-          (display ";; assignment form") (newline)
-          (for-each (lambda (definition) (pretty-print definition) (newline))
-                    af)
-          (newline)
-          (newline))
+      
+      (display ";; reference counting") (newline)
+      (reference-count-program content)
+      (newline)
+      (newline)
+      
+      ;; (let ((af (assignment-form-program content)))
+      ;;   (when debug
+      ;;     (display ";; assignment form") (newline)
+      ;;     (for-each (lambda (definition) (pretty-print definition) (newline))
+      ;;               af)
+      ;;     (newline)
+      ;;     (newline))
         
-        (let ((cf (gen-program af)))
-          (display ";; c") (newline)
-          (for-each (lambda (definition) (pretty-print definition) (newline))
-                    cf))
-        ))))
+      ;;   (let ((cf (gen-program af)))
+      ;;     (display ";; c") (newline)
+      ;;     (for-each (lambda (definition) (pretty-print definition) (newline))
+      ;;               cf)))
+
+      )))
 
 (main #f)
 
