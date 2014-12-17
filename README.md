@@ -28,4 +28,11 @@ Goal:
 
 * 1: Get all tests working. DONE!
 * 2: Get all UFOs working. DONE!
-* 3: Add refcounting to reclaim unused memory
+* 3: Add refcounting to reclaim unused memory: ..attempted
+* 
+
+Notes:
+
+I added refcounting in a way that isn't if-aware. Since only one branch of an if is taken this will not work correctly on any code that uses ifs. It looks complex to add that to this code.
+
+Even code without ifs is not reclaiming all memory for some reason.
