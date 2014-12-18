@@ -6,7 +6,6 @@
   (declare (struct scm) r1)
   (declare (struct scm) r2)
   (declare (struct scm) r6)
-  (refcount-dec env2498)
   (declare (struct scm) clor3)
   (set! clor3 (scm-wrap-fptr scm-make-vector))
   (set! r1 (make-struct (struct scm) (tag 0) (val.i 2)))
@@ -23,12 +22,11 @@
   (set! env5
     (array-ref (struct->ref (struct-ref (struct-ref clor3 val) v) elt) 1))
   (set! r0 (clo4 env5 r1 r2))
-  (refcount-dec clor3)
+  (refcount-dec-one clor3)
   (return r0))
 
 (define ((struct scm) scm-main ((struct scm) env2498))
   (declare (struct scm) r7)
-  (refcount-dec env2498)
   (declare (struct scm) clor8)
   (set! clor8 (scm-wrap-fptr foo))
   (declare (type scm-fptr) clo9)
@@ -42,7 +40,7 @@
   (set! env10
     (array-ref (struct->ref (struct-ref (struct-ref clor8 val) v) elt) 1))
   (set! r7 (clo9 env10))
-  (refcount-dec clor8)
+  (refcount-dec-one clor8)
   (return r7))
 
 (define ((struct scm) g2499 ((struct scm) env2498) ((struct scm) i))
@@ -50,7 +48,6 @@
   (declare (struct scm) r12)
   (declare (struct scm) r13)
   (declare (struct scm) r14)
-  (refcount-dec env2498)
   (declare (struct scm) clor15)
   (set! clor15 (scm-wrap-fptr scm-eq))
   (set! r13 i)
@@ -66,7 +63,7 @@
   (set! env17
     (array-ref (struct->ref (struct-ref (struct-ref clor15 val) v) elt) 1))
   (set! r12 (clo16 env17 r13 r14))
-  (refcount-dec clor15)
+  (refcount-dec-one clor15)
   (if (scm-extract-truth r12)
     (begin (set! r11 (make-struct (struct scm) (tag 0) (val.i 105))))
     (begin (set! r11 (make-struct (struct scm) (tag 0) (val.i 104)))))

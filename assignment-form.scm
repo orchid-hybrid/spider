@@ -12,25 +12,25 @@
     (`(begin ,x) => (assignment-form* x r gen-sym))
     (`(begin ,x . ,y) => 
                           ;;let ((rk (gen-sym "r")))
-     `(join (assignment-form* x #f gen-sym)
+     `(join ,(assignment-form* x #f gen-sym)
             ,(assignment-form* `(begin . ,y) r gen-sym)))
-    (`(if ,b ,t ,e) =>
+    (`(if ,b ,tt ,t ,et ,e) =>
      (let ((b-r (gen-sym "r")))
        `(join ,(assignment-form* b b-r gen-sym)
               (elt (if ,b-r
-                       (begin . ,(assignment-form t r gen-sym))
-                       (begin . ,(assignment-form e r gen-sym)))))))
+                       ,tt (begin . ,(assignment-form t r gen-sym))
+                       ,et (begin . ,(assignment-form e r gen-sym)))))))
     (`(make-closure ,f ,v) =>
      (let ((r2 (gen-sym "r")))
        `(join
          ,(assignment-form* v r2 gen-sym)
          (elt ,(if r
                    `(set! ,r (make-closure ,f ,r2))
-                   `(refcount-dec (make-closure ,f ,r2)))))))
+                   `(refcount-dec-one (make-closure ,f ,r2)))))))
     (`(scm-wrap-fptr ,p) =>
      (if r
          `(elt (set! ,r (scm-wrap-fptr ,p)))
-         `(elt (refcount-dec (scm-wrap-fptr ,p)))))
+         `(elt (refcount-dec-one (scm-wrap-fptr ,p)))))
     (`(invoke-closure ,clo . ,args) => ;; TODO insert asserts
      ;; REF: we now dec the closure after invoking it
      (let ((results (map (lambda (_) (gen-sym "r")) args)))
@@ -51,7 +51,7 @@
                             (join (elt ,(if r
                                             `(set! ,r (,clo-fptr ,clo-env . ,results))
                                             `(,clo-fptr ,clo-env . ,results)))
-                                  (elt (refcount-dec ,clo-r)))))))))
+                                  (elt (refcount-dec-one ,clo-r)))))))))
     (`(,f . ,args) =>
      (begin (unless (symbol? f) (error (list "Invalid function call with head" f)))
             (let ((results (map (lambda (_) (gen-sym "r")) args)))
@@ -60,7 +60,7 @@
                                 args results))
                      (elt ,(if r
                                `(set! ,r (,f . ,results))
-                               `(refcount-dec (,f . ,results))))))))
+                               `(refcount-dec-one (,f . ,results))))))))
     (else (if (or (symbol? t) (atomic? t))
               (if r
                   `(elt (set! ,r ,t))

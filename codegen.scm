@@ -44,17 +44,19 @@
                   (iota (length elts))))))
     (`(set! ,v ,e) => (list `(set! ,v ,(gen-exp e))))
     (`(return ,r) => (list `(return ,r)))
-    (`(if ,b (begin . ,t) (begin . ,e)) =>
+    (`(if ,b ,tt (begin . ,t) ,et (begin . ,e)) =>
      (list `(if (scm-extract-truth ,(gen-exp b))
-                (begin . ,(concat-map gen-body t))
-                (begin . ,(concat-map gen-body e)))))
+                (begin . ,(append (apply append (map gen-reference-count tt))
+                                  (concat-map gen-body t)))
+                (begin . ,(append (apply append (map gen-reference-count et))
+                                  (concat-map gen-body e))))))
     (else (list (gen-exp body)))
     ))
 
 (define (gen-reference-count cell)
   (let ((symbol (car cell))
         (count (cdr cell)))
-    (cond ((= count -1) (list `(refcount-dec ,symbol)))
+    (cond ((< count 0) (list `(refcount-dec ,symbol ,(- count))))
           ((= count 0) '())
           ((> count 0) (list `(refcount-inc ,symbol ,count))))))
 

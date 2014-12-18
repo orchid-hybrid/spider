@@ -26,6 +26,10 @@
       (let ((content (reference-count-program debug content)))
         (when debug
           (newline)
+          (newline)
+          (for-each (lambda (definition) (pretty-print definition) (newline))
+                    content)
+          (newline)
           (newline))
         
         (let ((af (assignment-form-program content)))

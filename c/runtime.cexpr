@@ -39,7 +39,12 @@
  (scm-memory-trace)
  (return (malloc size)))
 
-(define (void refcount-dec ((struct scm) s))
+(define (void refcount-dec ((struct scm) s) (int j))
+  (while (> j 0)
+    (refcount-dec-one s)
+    (set! j (- j 1))))
+
+(define (void refcount-dec-one ((struct scm) s))
   (declare int i)
   (declare (* (struct scm-vector)) v)
   (if (\|\| (= 2 (struct-ref s tag)) ;; vector
@@ -49,7 +54,7 @@
              (if (= 0 (struct->ref v ref))
                  (begin (set! i 0)
                         (while (< i (struct->ref v len))
-                               (refcount-dec (array-ref (struct->ref v elt) i))
+                               (refcount-dec-one (array-ref (struct->ref v elt) i))
                                (set! i (+ i 1)) ;; this was causing an error by being above the previous line before!
                                )
                         (scm-free (* (sizeof (struct scm)) (struct->ref v len)) (struct->ref v elt))
@@ -130,15 +135,16 @@
                             (putchar #\?))
                         (set! i (+ i 1))))
           (putchar #\?)))
-  (refcount-dec env)
-  (refcount-dec a)
+  (refcount-dec-one env)
+  (refcount-dec-one a)
   (return (make-struct (struct scm)
                        (tag 0)
                        (val.i 0))))
 
 (define (int scm-extract-truth ((struct scm) x))
   ;; REF: destroys x
-  (refcount-dec x)
+  ;;      it's okay to dec then look at since we only inspect fields when it's an immediate not a vector
+  (refcount-dec-one x)
   (return (\|\| (! (= 0 (struct-ref x tag)))
                 (! (= 0 (struct-ref x val.i))))))
 
@@ -157,9 +163,9 @@
   (assert (< i (struct->ref (struct-ref (struct-ref vec val) v) len)))
   (set! ret (array-ref v i))
   (refcount-inc ret 1)
-  (refcount-dec env)
-  (refcount-dec vec)
-  (refcount-dec idx)
+  (refcount-dec-one env)
+  (refcount-dec-one vec)
+  (refcount-dec-one idx)
   (return ret))
 
 (define ((struct scm) scm-vector-length ((struct scm) env) ((struct scm) vec))
@@ -171,8 +177,8 @@
   (declare (struct scm) ret)
   (set! i (struct->ref (struct-ref (struct-ref vec val) v) len))
   (set! ret (make-struct (struct scm) (tag 0) (val.i i)))
-  (refcount-dec env)
-  (refcount-dec vec)
+  (refcount-dec-one env)
+  (refcount-dec-one vec)
   (return ret))
 
 (define ((struct scm) scm-make-vector ((struct scm) env) ((struct scm) len) ((struct scm) gen))
@@ -194,7 +200,7 @@
   (while (< j n)
          (set! (array-ref elt j) (fn envy (make-struct (struct scm) (tag 0) (val.i j))))
          (set! j (+ j 1)))
-  ;;(refcount-dec gen)
+  ;;(refcount-dec-one gen)
   (return v))
 
 (define ((struct scm) scm-string-to-vector ((* char) s))
@@ -223,7 +229,7 @@
 (define ((struct scm) scm-plus ((struct scm) env) ((struct scm) a) ((struct scm) b))
   (assert (= (struct-ref a tag) 0))
   (assert (= (struct-ref b tag) 0))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (return (make-struct (struct scm)
             (tag 0)
             (val.i (+ (struct-ref a val.i) (struct-ref b val.i))))))
@@ -231,7 +237,7 @@
 (define ((struct scm) scm-minus ((struct scm) env) ((struct scm) a) ((struct scm) b))
   (assert (= (struct-ref a tag) 0))
   (assert (= (struct-ref b tag) 0))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (return (make-struct (struct scm)
             (tag 0)
             (val.i (- (struct-ref a val.i) (struct-ref b val.i))))))
@@ -239,7 +245,7 @@
 (define ((struct scm) scm-multiply ((struct scm) env) ((struct scm) a) ((struct scm) b))
   (assert (= (struct-ref a tag) 0))
   (assert (= (struct-ref b tag) 0))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (return (make-struct (struct scm)
             (tag 0)
             (val.i (* (struct-ref a val.i) (struct-ref b val.i))))))
@@ -247,13 +253,13 @@
 (define ((struct scm) scm-divide ((struct scm) env) ((struct scm) a) ((struct scm) b))
   (assert (= (struct-ref a tag) 0))
   (assert (= (struct-ref b tag) 0))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (return (make-struct (struct scm)
             (tag 0)
             (val.i (/ (struct-ref a val.i) (struct-ref b val.i))))))
 
 (define ((struct scm) scm-eq ((struct scm) env) ((struct scm) a) ((struct scm) b))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (if (&& (= (struct-ref a tag) 0) (= (struct-ref b tag) 0))
       (return (make-struct (struct scm)
                 (tag 0)
@@ -261,7 +267,7 @@
       (return (make-struct (struct scm) (tag 0) (val.i 0)))))
 
 (define ((struct scm) scm-gt ((struct scm) env) ((struct scm) a) ((struct scm) b))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (if (&& (= (struct-ref a tag) 0) (= (struct-ref b tag) 0))
       (return (make-struct (struct scm)
                 (tag 0)
@@ -269,7 +275,7 @@
       (return (make-struct (struct scm) (tag 0) (val.i 0)))))
 
 (define ((struct scm) scm-lt ((struct scm) env) ((struct scm) a) ((struct scm) b))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (if (&& (= (struct-ref a tag) 0) (= (struct-ref b tag) 0))
       (return (make-struct (struct scm)
                 (tag 0)
@@ -277,7 +283,7 @@
       (return (make-struct (struct scm) (tag 0) (val.i 0)))))
 
 (define ((struct scm) scm-gteq ((struct scm) env) ((struct scm) a) ((struct scm) b))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (if (&& (= (struct-ref a tag) 0) (= (struct-ref b tag) 0))
       (return (make-struct (struct scm)
                 (tag 0)
@@ -285,7 +291,7 @@
       (return (make-struct (struct scm) (tag 0) (val.i 0)))))
 
 (define ((struct scm) scm-lteq ((struct scm) env) ((struct scm) a) ((struct scm) b))
-  (refcount-dec env)
+  (refcount-dec-one env)
   (if (&& (= (struct-ref a tag) 0) (= (struct-ref b tag) 0))
       (return (make-struct (struct scm)
                 (tag 0)
@@ -294,5 +300,5 @@
 
 (define (void main)
 ;; REF: try to get back down to zero
-        (refcount-dec (scm-main (make-struct (struct scm)))))
+        (refcount-dec-one (scm-main (make-struct (struct scm)))))
   

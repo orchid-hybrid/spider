@@ -4,7 +4,6 @@
 (define ((struct scm) scm-main ((struct scm) env2498))
   (declare (struct scm) r0)
   (declare (struct scm) r1)
-  (refcount-dec env2498)
   (declare (struct scm) clor2)
   (set! clor2 (scm-wrap-fptr scm-print))
   (set! r1 (make-struct (struct scm) (tag 0) (val.i 1729)))
@@ -19,6 +18,6 @@
   (set! env4
     (array-ref (struct->ref (struct-ref (struct-ref clor2 val) v) elt) 1))
   (set! r0 (clo3 env4 r1))
-  (refcount-dec clor2)
+  (refcount-dec-one clor2)
   (return r0))
 
