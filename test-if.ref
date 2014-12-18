@@ -1,0 +1,65 @@
+(define (test-if x y f g)
+  (if x
+    (invoke-closure f x x)
+    (invoke-closure g x y)))
+
+;; (define (test-if x y f g)
+;;   ((x . 2) (y . 0) (f . 0) (g . 0))
+;;   (if
+;;     x
+;;     ((f . 0) (g . -1) (x . 0) (y . -1))
+;;     (invoke-closure f x x)
+;;     ((f . -1) (g . 0) (x . -1) (y . 0))
+;;     (invoke-closure g x y)))
+
+;; (define (test-if x y f g)
+;;   ;;((x . 2) (y . 0) (f . 0) (g . 0))
+;;   (inc-refcount x 2)
+;;   (if x
+;;     (begin ;;((f . 0) (g . -1) (x . 0) (y . -1))
+;;      (dec-refcount g)
+;;      (dec-refcount y)
+;;      (invoke-closure f x x))
+;;     (begin ;;((f . -1) (g . 0) (x . -1) (y . 0))
+;;      (dec-refcount f)
+;;      (dec-refcount x)
+;;      (invoke-closure g x y))))
+
+;; (define ((struct scm) test-if ((struct scm) x) ((struct scm) y) ((struct scm) f) ((struct scm) g))
+;;   (set! r1 x)
+;;   (if (scm-extract-truth r1)
+;;     (begin
+;;       (refcount-dec g 1)
+;;       (refcount-dec y 1)
+;;       (declare (type scm-fptr) clo5)
+;;       (declare (struct scm) env6)
+;;       (set! clo5
+;;         (struct-ref
+;;           (struct-ref
+;;             (array-ref
+;;               (struct->ref (struct-ref (struct-ref f val) v) elt)
+;;               0)
+;;             val)
+;;           f))
+;;       (set! env6
+;;         (array-ref (struct->ref (struct-ref (struct-ref f val) v) elt) 1))
+;;       (set! r0 (clo5 env6 x x))
+;;       (refcount-dec f))
+;;     (begin
+;;       (refcount-dec f 1)
+;;       (refcount-dec x 1)
+;;       (declare (type scm-fptr) clo10)
+;;       (declare (struct scm) env11)
+;;       (set! clo10
+;;         (struct-ref
+;;           (struct-ref
+;;             (array-ref
+;;               (struct->ref (struct-ref (struct-ref g val) v) elt)
+;;               0)
+;;             val)
+;;           f))
+;;       (set! env11
+;;         (array-ref (struct->ref (struct-ref (struct-ref g val) v) elt) 1))
+;;       (set! r0 (clo10 env11 x x))
+;;       (refcount-dec g)))
+;;   (return r0))
