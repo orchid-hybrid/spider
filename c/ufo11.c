@@ -21,6 +21,7 @@ struct scm cons(struct scm env2498, struct scm x, struct scm y) {
     struct scm r1;
     struct scm r2;
     struct scm r3;
+    refcount_dec(env2498, 1);
     r2 = y;
     r3 = x;
     r1 = allocate_vector(2);
@@ -34,6 +35,7 @@ struct scm car(struct scm env2498, struct scm c) {
     struct scm r4;
     struct scm r5;
     struct scm r9;
+    refcount_dec(env2498, 1);
     struct scm clor6;
     clor6 = c;
     r9 = allocate_vector(0);
@@ -42,7 +44,9 @@ struct scm car(struct scm env2498, struct scm c) {
     struct scm env8;
     clo7 = clor6.val.v->elt[0].val.f;
     env8 = clor6.val.v->elt[1];
+    refcount_inc_one(env8);
     r4 = clo7(env8, r5);
+    refcount_dec_one(clor6);
     return r4;
 }
 
@@ -50,6 +54,7 @@ struct scm cdr(struct scm env2498, struct scm c) {
     struct scm r10;
     struct scm r11;
     struct scm r15;
+    refcount_dec(env2498, 1);
     struct scm clor12;
     clor12 = c;
     r15 = allocate_vector(0);
@@ -58,12 +63,16 @@ struct scm cdr(struct scm env2498, struct scm c) {
     struct scm env14;
     clo13 = clor12.val.v->elt[0].val.f;
     env14 = clor12.val.v->elt[1];
+    refcount_inc_one(env14);
     r10 = clo13(env14, r11);
+    refcount_dec_one(clor12);
     return r10;
 }
 
 struct scm begin(struct scm env2498, struct scm a, struct scm b) {
     struct scm r16;
+    refcount_dec(env2498, 1);
+    refcount_dec(a, 1);
     r16 = b;
     return r16;
 }
@@ -78,6 +87,9 @@ struct scm for_each(struct scm env2498, struct scm f, struct scm l) {
     struct scm r32;
     struct scm r33;
     struct scm r37;
+    refcount_dec(env2498, 1);
+    refcount_inc(f, 1);
+    refcount_inc(l, 2);
     r18 = l;
     if (scm_extract_truth(r18)) {
         struct scm clor21;
@@ -91,12 +103,16 @@ struct scm for_each(struct scm env2498, struct scm f, struct scm l) {
         struct scm env31;
         clo30 = clor29.val.v->elt[0].val.f;
         env31 = clor29.val.v->elt[1];
+        refcount_inc_one(env31);
         r24 = clo30(env31, r28);
+        refcount_dec_one(clor29);
         scm_fptr clo26;
         struct scm env27;
         clo26 = clor25.val.v->elt[0].val.f;
         env27 = clor25.val.v->elt[1];
+        refcount_inc_one(env27);
         r19 = clo26(env27, r24);
+        refcount_dec_one(clor25);
         struct scm clor34;
         clor34 = scm_wrap_fptr(for_each);
         r32 = f;
@@ -107,18 +123,26 @@ struct scm for_each(struct scm env2498, struct scm f, struct scm l) {
         struct scm env40;
         clo39 = clor38.val.v->elt[0].val.f;
         env40 = clor38.val.v->elt[1];
+        refcount_inc_one(env40);
         r33 = clo39(env40, r37);
+        refcount_dec_one(clor38);
         scm_fptr clo35;
         struct scm env36;
         clo35 = clor34.val.v->elt[0].val.f;
         env36 = clor34.val.v->elt[1];
+        refcount_inc_one(env36);
         r20 = clo35(env36, r32, r33);
+        refcount_dec_one(clor34);
         scm_fptr clo22;
         struct scm env23;
         clo22 = clor21.val.v->elt[0].val.f;
         env23 = clor21.val.v->elt[1];
+        refcount_inc_one(env23);
         r17 = clo22(env23, r19, r20);
+        refcount_dec_one(clor21);
     } else {
+        refcount_dec(f, 2);
+        refcount_dec(l, 2);
         r17 = (struct scm){ .tag = 0, .val.i = 0 };
     }
     return r17;
@@ -134,6 +158,9 @@ struct scm map(struct scm env2498, struct scm f, struct scm l) {
     struct scm r56;
     struct scm r57;
     struct scm r61;
+    refcount_dec(env2498, 1);
+    refcount_inc(f, 1);
+    refcount_inc(l, 2);
     r42 = l;
     if (scm_extract_truth(r42)) {
         struct scm clor45;
@@ -147,12 +174,16 @@ struct scm map(struct scm env2498, struct scm f, struct scm l) {
         struct scm env55;
         clo54 = clor53.val.v->elt[0].val.f;
         env55 = clor53.val.v->elt[1];
+        refcount_inc_one(env55);
         r48 = clo54(env55, r52);
+        refcount_dec_one(clor53);
         scm_fptr clo50;
         struct scm env51;
         clo50 = clor49.val.v->elt[0].val.f;
         env51 = clor49.val.v->elt[1];
+        refcount_inc_one(env51);
         r43 = clo50(env51, r48);
+        refcount_dec_one(clor49);
         struct scm clor58;
         clor58 = scm_wrap_fptr(map);
         r56 = f;
@@ -163,18 +194,26 @@ struct scm map(struct scm env2498, struct scm f, struct scm l) {
         struct scm env64;
         clo63 = clor62.val.v->elt[0].val.f;
         env64 = clor62.val.v->elt[1];
+        refcount_inc_one(env64);
         r57 = clo63(env64, r61);
+        refcount_dec_one(clor62);
         scm_fptr clo59;
         struct scm env60;
         clo59 = clor58.val.v->elt[0].val.f;
         env60 = clor58.val.v->elt[1];
+        refcount_inc_one(env60);
         r44 = clo59(env60, r56, r57);
+        refcount_dec_one(clor58);
         scm_fptr clo46;
         struct scm env47;
         clo46 = clor45.val.v->elt[0].val.f;
         env47 = clor45.val.v->elt[1];
+        refcount_inc_one(env47);
         r41 = clo46(env47, r43, r44);
+        refcount_dec_one(clor45);
     } else {
+        refcount_dec(f, 2);
+        refcount_dec(l, 2);
         r41 = (struct scm){ .tag = 0, .val.i = 0 };
     }
     return r41;
@@ -189,6 +228,8 @@ struct scm append(struct scm env2498, struct scm a, struct scm b) {
     struct scm r76;
     struct scm r77;
     struct scm r81;
+    refcount_dec(env2498, 1);
+    refcount_inc(a, 2);
     r66 = a;
     if (scm_extract_truth(r66)) {
         struct scm clor69;
@@ -200,7 +241,9 @@ struct scm append(struct scm env2498, struct scm a, struct scm b) {
         struct scm env75;
         clo74 = clor73.val.v->elt[0].val.f;
         env75 = clor73.val.v->elt[1];
+        refcount_inc_one(env75);
         r67 = clo74(env75, r72);
+        refcount_dec_one(clor73);
         struct scm clor78;
         clor78 = scm_wrap_fptr(append);
         struct scm clor82;
@@ -210,19 +253,26 @@ struct scm append(struct scm env2498, struct scm a, struct scm b) {
         struct scm env84;
         clo83 = clor82.val.v->elt[0].val.f;
         env84 = clor82.val.v->elt[1];
+        refcount_inc_one(env84);
         r76 = clo83(env84, r81);
+        refcount_dec_one(clor82);
         r77 = b;
         scm_fptr clo79;
         struct scm env80;
         clo79 = clor78.val.v->elt[0].val.f;
         env80 = clor78.val.v->elt[1];
+        refcount_inc_one(env80);
         r68 = clo79(env80, r76, r77);
+        refcount_dec_one(clor78);
         scm_fptr clo70;
         struct scm env71;
         clo70 = clor69.val.v->elt[0].val.f;
         env71 = clor69.val.v->elt[1];
+        refcount_inc_one(env71);
         r65 = clo70(env71, r67, r68);
+        refcount_dec_one(clor69);
     } else {
+        refcount_dec(a, 2);
         r65 = b;
     }
     return r65;
@@ -247,6 +297,10 @@ struct scm loop(struct scm env2498, struct scm acc, struct scm spaces, struct sc
     struct scm r112;
     struct scm r116;
     struct scm r117;
+    refcount_dec(env2498, 1);
+    refcount_inc(acc, 1);
+    refcount_inc(spaces, 2);
+    refcount_inc(n, 1);
     r86 = n;
     if (scm_extract_truth(r86)) {
         struct scm clor90;
@@ -264,7 +318,9 @@ struct scm loop(struct scm env2498, struct scm acc, struct scm spaces, struct sc
         struct scm env102;
         clo101 = clor100.val.v->elt[0].val.f;
         env102 = clor100.val.v->elt[1];
+        refcount_inc_one(env102);
         r93 = clo101(env102, r98, r99);
+        refcount_dec_one(clor100);
         struct scm clor107;
         clor107 = scm_wrap_fptr(map);
         r110 = allocate_vector(0);
@@ -274,12 +330,16 @@ struct scm loop(struct scm env2498, struct scm acc, struct scm spaces, struct sc
         struct scm env109;
         clo108 = clor107.val.v->elt[0].val.f;
         env109 = clor107.val.v->elt[1];
+        refcount_inc_one(env109);
         r94 = clo108(env109, r105, r106);
+        refcount_dec_one(clor107);
         scm_fptr clo96;
         struct scm env97;
         clo96 = clor95.val.v->elt[0].val.f;
         env97 = clor95.val.v->elt[1];
+        refcount_inc_one(env97);
         r87 = clo96(env97, r93, r94);
+        refcount_dec_one(clor95);
         struct scm clor113;
         clor113 = scm_wrap_fptr(append);
         r111 = spaces;
@@ -288,7 +348,9 @@ struct scm loop(struct scm env2498, struct scm acc, struct scm spaces, struct sc
         struct scm env115;
         clo114 = clor113.val.v->elt[0].val.f;
         env115 = clor113.val.v->elt[1];
+        refcount_inc_one(env115);
         r88 = clo114(env115, r111, r112);
+        refcount_dec_one(clor113);
         struct scm clor118;
         clor118 = scm_wrap_fptr(scm_minus);
         r116 = n;
@@ -297,13 +359,20 @@ struct scm loop(struct scm env2498, struct scm acc, struct scm spaces, struct sc
         struct scm env120;
         clo119 = clor118.val.v->elt[0].val.f;
         env120 = clor118.val.v->elt[1];
+        refcount_inc_one(env120);
         r89 = clo119(env120, r116, r117);
+        refcount_dec_one(clor118);
         scm_fptr clo91;
         struct scm env92;
         clo91 = clor90.val.v->elt[0].val.f;
         env92 = clor90.val.v->elt[1];
+        refcount_inc_one(env92);
         r85 = clo91(env92, r87, r88, r89);
+        refcount_dec_one(clor90);
     } else {
+        refcount_dec(n, 1);
+        refcount_dec(spaces, 3);
+        refcount_dec(acc, 1);
         r85 = acc;
     }
     return r85;
@@ -323,6 +392,7 @@ struct scm sierpinski(struct scm env2498, struct scm n) {
     struct scm r140;
     struct scm r144;
     struct scm r145;
+    refcount_dec(env2498, 1);
     struct scm clor124;
     clor124 = scm_wrap_fptr(for_each);
     r127 = allocate_vector(0);
@@ -339,13 +409,17 @@ struct scm sierpinski(struct scm env2498, struct scm n) {
     struct scm env143;
     clo142 = clor141.val.v->elt[0].val.f;
     env143 = clor141.val.v->elt[1];
+    refcount_inc_one(env143);
     r134 = clo142(env143, r139, r140);
+    refcount_dec_one(clor141);
     r135 = (struct scm){ .tag = 0, .val.i = 0 };
     scm_fptr clo137;
     struct scm env138;
     clo137 = clor136.val.v->elt[0].val.f;
     env138 = clor136.val.v->elt[1];
+    refcount_inc_one(env138);
     r128 = clo137(env138, r134, r135);
+    refcount_dec_one(clor136);
     struct scm clor146;
     clor146 = scm_wrap_fptr(cons);
     r144 = scm_string_to_vector(" ");
@@ -354,24 +428,31 @@ struct scm sierpinski(struct scm env2498, struct scm n) {
     struct scm env148;
     clo147 = clor146.val.v->elt[0].val.f;
     env148 = clor146.val.v->elt[1];
+    refcount_inc_one(env148);
     r129 = clo147(env148, r144, r145);
+    refcount_dec_one(clor146);
     r130 = n;
     scm_fptr clo132;
     struct scm env133;
     clo132 = clor131.val.v->elt[0].val.f;
     env133 = clor131.val.v->elt[1];
+    refcount_inc_one(env133);
     r123 = clo132(env133, r128, r129, r130);
+    refcount_dec_one(clor131);
     scm_fptr clo125;
     struct scm env126;
     clo125 = clor124.val.v->elt[0].val.f;
     env126 = clor124.val.v->elt[1];
+    refcount_inc_one(env126);
     r121 = clo125(env126, r122, r123);
+    refcount_dec_one(clor124);
     return r121;
 }
 
 struct scm scm_main(struct scm env2498) {
     struct scm r149;
     struct scm r150;
+    refcount_dec(env2498, 1);
     struct scm clor151;
     clor151 = scm_wrap_fptr(sierpinski);
     r150 = (struct scm){ .tag = 0, .val.i = 4 };
@@ -379,7 +460,9 @@ struct scm scm_main(struct scm env2498) {
     struct scm env153;
     clo152 = clor151.val.v->elt[0].val.f;
     env153 = clor151.val.v->elt[1];
+    refcount_inc_one(env153);
     r149 = clo152(env153, r150);
+    refcount_dec_one(clor151);
     return r149;
 }
 
@@ -390,6 +473,7 @@ struct scm g2504(struct scm env2498, struct scm x) {
     struct scm r160;
     struct scm r161;
     struct scm r165;
+    refcount_dec(env2498, 1);
     struct scm clor157;
     clor157 = scm_wrap_fptr(begin);
     struct scm clor162;
@@ -400,7 +484,9 @@ struct scm g2504(struct scm env2498, struct scm x) {
     struct scm env164;
     clo163 = clor162.val.v->elt[0].val.f;
     env164 = clor162.val.v->elt[1];
+    refcount_inc_one(env164);
     r155 = clo163(env164, r160, r161);
+    refcount_dec_one(clor162);
     struct scm clor166;
     clor166 = scm_wrap_fptr(scm_print);
     r165 = scm_string_to_vector("\n");
@@ -408,12 +494,16 @@ struct scm g2504(struct scm env2498, struct scm x) {
     struct scm env168;
     clo167 = clor166.val.v->elt[0].val.f;
     env168 = clor166.val.v->elt[1];
+    refcount_inc_one(env168);
     r156 = clo167(env168, r165);
+    refcount_dec_one(clor166);
     scm_fptr clo158;
     struct scm env159;
     clo158 = clor157.val.v->elt[0].val.f;
     env159 = clor157.val.v->elt[1];
+    refcount_inc_one(env159);
     r154 = clo158(env159, r155, r156);
+    refcount_dec_one(clor157);
     return r154;
 }
 
@@ -425,6 +515,8 @@ struct scm g2503(struct scm env2498, struct scm x) {
     struct scm r176;
     struct scm r180;
     struct scm r181;
+    refcount_dec(env2498, 1);
+    refcount_inc(x, 1);
     struct scm clor172;
     clor172 = scm_wrap_fptr(append);
     r170 = x;
@@ -438,18 +530,24 @@ struct scm g2503(struct scm env2498, struct scm x) {
     struct scm env184;
     clo183 = clor182.val.v->elt[0].val.f;
     env184 = clor182.val.v->elt[1];
+    refcount_inc_one(env184);
     r175 = clo183(env184, r180, r181);
+    refcount_dec_one(clor182);
     r176 = x;
     scm_fptr clo178;
     struct scm env179;
     clo178 = clor177.val.v->elt[0].val.f;
     env179 = clor177.val.v->elt[1];
+    refcount_inc_one(env179);
     r171 = clo178(env179, r175, r176);
+    refcount_dec_one(clor177);
     scm_fptr clo173;
     struct scm env174;
     clo173 = clor172.val.v->elt[0].val.f;
     env174 = clor172.val.v->elt[1];
+    refcount_inc_one(env174);
     r169 = clo173(env174, r170, r171);
+    refcount_dec_one(clor172);
     return r169;
 }
 
@@ -461,65 +559,85 @@ struct scm g2502(struct scm env2498, struct scm x) {
     struct scm r192;
     struct scm r193;
     struct scm r194;
-    struct scm r198;
+    struct scm r195;
     struct scm r199;
+    struct scm r200;
+    struct scm r201;
+    refcount_inc(env2498, 1);
     struct scm clor188;
     clor188 = scm_wrap_fptr(append);
-    r191 = env2498;
-    r192 = (struct scm){ .tag = 0, .val.i = 0 };
-    r186 = scm_vector_ref(r191, r192);
-    struct scm clor195;
-    clor195 = scm_wrap_fptr(append);
-    r193 = x;
-    r198 = env2498;
+    r191 = (struct scm){ .tag = 0, .val.i = 0 };
+    r192 = env2498;
+    r193 = (struct scm){ .tag = 0, .val.i = 0 };
+    r186 = scm_vector_ref(r191, r192, r193);
+    struct scm clor196;
+    clor196 = scm_wrap_fptr(append);
+    r194 = x;
     r199 = (struct scm){ .tag = 0, .val.i = 0 };
-    r194 = scm_vector_ref(r198, r199);
-    scm_fptr clo196;
-    struct scm env197;
-    clo196 = clor195.val.v->elt[0].val.f;
-    env197 = clor195.val.v->elt[1];
-    r187 = clo196(env197, r193, r194);
+    r200 = env2498;
+    r201 = (struct scm){ .tag = 0, .val.i = 0 };
+    r195 = scm_vector_ref(r199, r200, r201);
+    scm_fptr clo197;
+    struct scm env198;
+    clo197 = clor196.val.v->elt[0].val.f;
+    env198 = clor196.val.v->elt[1];
+    refcount_inc_one(env198);
+    r187 = clo197(env198, r194, r195);
+    refcount_dec_one(clor196);
     scm_fptr clo189;
     struct scm env190;
     clo189 = clor188.val.v->elt[0].val.f;
     env190 = clor188.val.v->elt[1];
+    refcount_inc_one(env190);
     r185 = clo189(env190, r186, r187);
+    refcount_dec_one(clor188);
     return r185;
 }
 
 struct scm g2501(struct scm env2498, struct scm x, struct scm y) {
-    struct scm r200;
-    r200 = y;
-    return r200;
+    struct scm r202;
+    refcount_dec(env2498, 1);
+    refcount_dec(x, 1);
+    r202 = y;
+    return r202;
 }
 
 struct scm g2500(struct scm env2498, struct scm x, struct scm y) {
-    struct scm r201;
-    r201 = x;
-    return r201;
+    struct scm r203;
+    refcount_dec(env2498, 1);
+    refcount_dec(y, 1);
+    r203 = x;
+    return r203;
 }
 
 struct scm g2499(struct scm env2498, struct scm selector) {
-    struct scm r202;
-    struct scm r203;
     struct scm r204;
-    struct scm r208;
-    struct scm r209;
+    struct scm r205;
+    struct scm r206;
     struct scm r210;
     struct scm r211;
-    struct scm clor205;
-    clor205 = selector;
-    r208 = env2498;
-    r209 = (struct scm){ .tag = 0, .val.i = 1 };
-    r203 = scm_vector_ref(r208, r209);
-    r210 = env2498;
-    r211 = (struct scm){ .tag = 0, .val.i = 0 };
-    r204 = scm_vector_ref(r210, r211);
-    scm_fptr clo206;
-    struct scm env207;
-    clo206 = clor205.val.v->elt[0].val.f;
-    env207 = clor205.val.v->elt[1];
-    r202 = clo206(env207, r203, r204);
-    return r202;
+    struct scm r212;
+    struct scm r213;
+    struct scm r214;
+    struct scm r215;
+    refcount_inc(env2498, 1);
+    struct scm clor207;
+    clor207 = selector;
+    r210 = (struct scm){ .tag = 0, .val.i = 0 };
+    r211 = env2498;
+    r212 = (struct scm){ .tag = 0, .val.i = 1 };
+    r205 = scm_vector_ref(r210, r211, r212);
+    r213 = (struct scm){ .tag = 0, .val.i = 0 };
+    r214 = env2498;
+    r215 = (struct scm){ .tag = 0, .val.i = 0 };
+    r206 = scm_vector_ref(r213, r214, r215);
+    scm_fptr clo208;
+    struct scm env209;
+    clo208 = clor207.val.v->elt[0].val.f;
+    env209 = clor207.val.v->elt[1];
+    refcount_inc_one(env209);
+    r204 = clo208(env209, r205, r206);
+    refcount_dec_one(clor207);
+    return r204;
 }
 

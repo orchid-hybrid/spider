@@ -209,10 +209,14 @@ struct scm scm_make_vector(struct scm env, struct scm len, struct scm gen) {
     v = allocate_vector(n);
     elt = v.val.v->elt;
     j = 0;
+    refcount_inc(envy, n);
     while ((j < n)) {
         elt[j] = fn(envy, (struct scm){ .tag = 0, .val.i = j });
         j = (j + 1);
     }
+    refcount_dec_one(env);
+    refcount_dec_one(len);
+    refcount_dec_one(gen);
     return v;
 }
 

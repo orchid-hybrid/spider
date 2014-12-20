@@ -182,7 +182,8 @@
   (return ret))
 
 (define ((struct scm) scm-make-vector ((struct scm) env) ((struct scm) len) ((struct scm) gen))
-  ;; TODO
+  ;; REF: envy (of gen) is passed into the function n times, so we inc it by n
+  ;;      at the end we dec gen (which contains envy)
   (assert (= (struct-ref len tag) 0))
   (assert (= (struct-ref gen tag) 3)) ;; closure
   (declare (struct scm) v)
@@ -197,10 +198,13 @@
   (set! v (allocate-vector n))
   (set! elt (struct->ref (struct-ref (struct-ref v val) v) elt))
   (set! j 0)
+  (refcount-inc envy n)
   (while (< j n)
          (set! (array-ref elt j) (fn envy (make-struct (struct scm) (tag 0) (val.i j))))
          (set! j (+ j 1)))
-  ;;(refcount-dec-one gen)
+  (refcount-dec-one env)
+  (refcount-dec-one len)
+  (refcount-dec-one gen)
   (return v))
 
 (define ((struct scm) scm-string-to-vector ((* char) s))

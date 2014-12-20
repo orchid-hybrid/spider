@@ -7,6 +7,8 @@
          ((struct scm) a)
          ((struct scm) b))
   (declare (struct scm) r0)
+  (refcount-dec env2498 1)
+  (refcount-dec a 1)
   (set! r0 b)
   (return r0))
 
@@ -16,6 +18,8 @@
   (declare (struct scm) r3)
   (declare (struct scm) r7)
   (declare (struct scm) r8)
+  (refcount-dec env2498 1)
+  (refcount-inc n 1)
   (set! r2 n)
   (if (scm-extract-truth r2)
     (begin
@@ -37,7 +41,9 @@
           f))
       (set! env11
         (array-ref (struct->ref (struct-ref (struct-ref clor9 val) v) elt) 1))
+      (refcount-inc-one env11)
       (set! r3 (clo10 env11 r7 r8))
+      (refcount-dec-one clor9)
       (declare (type scm-fptr) clo5)
       (declare (struct scm) env6)
       (set! clo5
@@ -50,8 +56,12 @@
           f))
       (set! env6
         (array-ref (struct->ref (struct-ref (struct-ref clor4 val) v) elt) 1))
-      (set! r1 (clo5 env6 r3)))
-    (begin (set! r1 (make-struct (struct scm) (tag 0) (val.i 0)))))
+      (refcount-inc-one env6)
+      (set! r1 (clo5 env6 r3))
+      (refcount-dec-one clor4))
+    (begin
+      (refcount-dec n 1)
+      (set! r1 (make-struct (struct scm) (tag 0) (val.i 0)))))
   (return r1))
 
 (define ((struct scm) scm-main ((struct scm) env2498))
@@ -74,6 +84,7 @@
   (declare (struct scm) r58)
   (declare (struct scm) r59)
   (declare (struct scm) r63)
+  (refcount-dec env2498 1)
   (declare (struct scm) clor15)
   (set! clor15 (scm-wrap-fptr begin))
   (declare (struct scm) clor19)
@@ -89,7 +100,9 @@
       f))
   (set! env21
     (array-ref (struct->ref (struct-ref (struct-ref clor19 val) v) elt) 1))
+  (refcount-inc-one env21)
   (set! r13 (clo20 env21 r18))
+  (refcount-dec-one clor19)
   (declare (struct scm) clor24)
   (set! clor24 (scm-wrap-fptr begin))
   (declare (struct scm) clor28)
@@ -105,7 +118,9 @@
       f))
   (set! env30
     (array-ref (struct->ref (struct-ref (struct-ref clor28 val) v) elt) 1))
+  (refcount-inc-one env30)
   (set! r22 (clo29 env30 r27))
+  (refcount-dec-one clor28)
   (declare (struct scm) clor33)
   (set! clor33 (scm-wrap-fptr begin))
   (declare (struct scm) clor37)
@@ -121,7 +136,9 @@
       f))
   (set! env39
     (array-ref (struct->ref (struct-ref (struct-ref clor37 val) v) elt) 1))
+  (refcount-inc-one env39)
   (set! r31 (clo38 env39 r36))
+  (refcount-dec-one clor37)
   (declare (struct scm) clor42)
   (set! clor42 (scm-wrap-fptr begin))
   (declare (struct scm) clor46)
@@ -137,7 +154,9 @@
       f))
   (set! env48
     (array-ref (struct->ref (struct-ref (struct-ref clor46 val) v) elt) 1))
+  (refcount-inc-one env48)
   (set! r40 (clo47 env48 r45))
+  (refcount-dec-one clor46)
   (declare (struct scm) clor51)
   (set! clor51 (scm-wrap-fptr begin))
   (declare (struct scm) clor55)
@@ -153,7 +172,9 @@
       f))
   (set! env57
     (array-ref (struct->ref (struct-ref (struct-ref clor55 val) v) elt) 1))
+  (refcount-inc-one env57)
   (set! r49 (clo56 env57 r54))
+  (refcount-dec-one clor55)
   (declare (struct scm) clor60)
   (set! clor60 (scm-wrap-fptr begin))
   (declare (struct scm) clor64)
@@ -169,7 +190,9 @@
       f))
   (set! env66
     (array-ref (struct->ref (struct-ref (struct-ref clor64 val) v) elt) 1))
+  (refcount-inc-one env66)
   (set! r58 (clo65 env66 r63))
+  (refcount-dec-one clor64)
   (set! r59 (make-struct (struct scm) (tag 0) (val.i 0)))
   (declare (type scm-fptr) clo61)
   (declare (struct scm) env62)
@@ -181,7 +204,9 @@
       f))
   (set! env62
     (array-ref (struct->ref (struct-ref (struct-ref clor60 val) v) elt) 1))
+  (refcount-inc-one env62)
   (set! r50 (clo61 env62 r58 r59))
+  (refcount-dec-one clor60)
   (declare (type scm-fptr) clo52)
   (declare (struct scm) env53)
   (set! clo52
@@ -192,7 +217,9 @@
       f))
   (set! env53
     (array-ref (struct->ref (struct-ref (struct-ref clor51 val) v) elt) 1))
+  (refcount-inc-one env53)
   (set! r41 (clo52 env53 r49 r50))
+  (refcount-dec-one clor51)
   (declare (type scm-fptr) clo43)
   (declare (struct scm) env44)
   (set! clo43
@@ -203,7 +230,9 @@
       f))
   (set! env44
     (array-ref (struct->ref (struct-ref (struct-ref clor42 val) v) elt) 1))
+  (refcount-inc-one env44)
   (set! r32 (clo43 env44 r40 r41))
+  (refcount-dec-one clor42)
   (declare (type scm-fptr) clo34)
   (declare (struct scm) env35)
   (set! clo34
@@ -214,7 +243,9 @@
       f))
   (set! env35
     (array-ref (struct->ref (struct-ref (struct-ref clor33 val) v) elt) 1))
+  (refcount-inc-one env35)
   (set! r23 (clo34 env35 r31 r32))
+  (refcount-dec-one clor33)
   (declare (type scm-fptr) clo25)
   (declare (struct scm) env26)
   (set! clo25
@@ -225,7 +256,9 @@
       f))
   (set! env26
     (array-ref (struct->ref (struct-ref (struct-ref clor24 val) v) elt) 1))
+  (refcount-inc-one env26)
   (set! r14 (clo25 env26 r22 r23))
+  (refcount-dec-one clor24)
   (declare (type scm-fptr) clo16)
   (declare (struct scm) env17)
   (set! clo16
@@ -236,6 +269,8 @@
       f))
   (set! env17
     (array-ref (struct->ref (struct-ref (struct-ref clor15 val) v) elt) 1))
+  (refcount-inc-one env17)
   (set! r12 (clo16 env17 r13 r14))
+  (refcount-dec-one clor15)
   (return r12))
 
