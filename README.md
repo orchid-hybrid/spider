@@ -28,19 +28,16 @@ Goal:
 
 * 1: Get all tests working. DONE!
 * 2: Get all UFOs working. DONE!
-* 3: Add refcounting to reclaim unused memory: ..attempted
+* 3: Add refcounting to reclaim unused memory: DONE!
 * 
 
 # Notes: #
 
-I added refcounting at the end in a way that isn't if-aware. Since only one branch of an if is taken this will not work correctly on any code that uses ifs. It looks complex to add that to this code. (A workaround would be having a builtin bool b c1 c2 that calls the continuation and frees the other - the better solution is to do refcounting properly).
-
-Even code without ifs is not reclaiming all memory for some reason. Would like to know why..
-
 ## Things to take away from this experiment ##
 
 * You need to handle ref-counting from the start differently for control flow operators like if (since execution paths only take one branch).
-* Infrastructure: Developed some good tools that can be re-used like sequences, improved the pattern matching, etc.
-* Separating the compiler into small parts works well and helps a lot. It is good to save out intermediate stage files (niea => ref => cexpr => c in this case).
+* refcounting is done by refcount.scm, that data is passed through to codegen.scm - but before that assignment-form.scm emits some of its own refcount stuff, it would be nicer if it were all done in one place.
+* Infrastructure: Developed some good tools that can be re-used like sequences (sequence can be improved a tiny bit), improved the pattern matching, etc.
+* Separating the compiler into small parts works well and helps a lot. It is good to save out intermediate stage files (niea => ref => cexpr => c in this case). To make this even better write scripts to do each pass including renaming (saves a very short amount of time, many many times so its worth it)
 * The code is quite clear overall (assignment form got a bit complex but that wouldn't be hard to tidy up), this is because of the nice pattern matcher. It was only possible to get this far thanks to clear hackable code.
 * It might help more to plan things better in advance. Spec the languages at each stage and think through each pass.
