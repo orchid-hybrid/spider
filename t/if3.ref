@@ -1,0 +1,3 @@
+(define (scm-main e)
+ (if 0 (invoke-closure (scm-wrap-fptr scm-print) "Hello!")
+        (invoke-closure (scm-wrap-fptr scm-print) "World!")))

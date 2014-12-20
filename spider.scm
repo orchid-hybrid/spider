@@ -4,6 +4,34 @@
 ;; TODO: wrapping functions
 ;; TODO: handling invoke-closure
 
+;; TODO:
+
+;; (define ((struct scm) scm-main ((struct scm) e))
+;;   (declare (struct scm) r0)
+;;   (declare (struct scm) r1)
+;;   (declare (struct scm) r2)
+;;   (refcount-dec e 1)
+;;   (declare (struct scm) clor3)
+;;   (set! clor3 (scm-wrap-fptr f))
+;;   (set! r1 (scm-string-to-vector "Hello"))
+;;   (set! r2 (scm-string-to-vector "World"))
+;;   (declare (type scm-fptr) clo4)
+;;   (declare (struct scm) env5)
+;;   (set! clo4
+;;     (struct-ref
+;;       (struct-ref
+;;         (array-ref (struct->ref (struct-ref (struct-ref clor3 val) v) elt) 0)
+;;         val)
+;;       f))
+;;   (set! env5
+;;     (array-ref (struct->ref (struct-ref (struct-ref clor3 val) v) elt) 1))
+;;   (set! r0 (clo4 env5 r1 r2))
+;;   (refcount-dec-one clor3)
+;;   (return r0))
+
+;; we should realy inc env5 before passing it in I think
+
+
 (module spider (main)
 (import chicken scheme)
 (use extras)

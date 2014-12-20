@@ -8,6 +8,7 @@ void scm_free(int, void*);
 void* scm_malloc(int);
 void refcount_dec(struct scm, int);
 void refcount_dec_one(struct scm);
+void refcount_inc_one(struct scm);
 void refcount_inc(struct scm, int);
 struct scm allocate_vector(int);
 void scm_vector_insert_bang(struct scm, struct scm, int);
@@ -87,6 +88,10 @@ void refcount_dec_one(struct scm s) {
         }
     } else {
     }
+}
+
+void refcount_inc_one(struct scm s) {
+    refcount_inc(s, 1);
 }
 
 void refcount_inc(struct scm s, int k) {

@@ -48,9 +48,10 @@
                                                                             (array-ref (struct->ref (struct-ref (struct-ref ,clo-r val) v) elt) 0)
                                                                             val) f))))
                                   (elt (direct (set! ,clo-env (array-ref (struct->ref (struct-ref (struct-ref ,clo-r val) v) elt) 1)))))
-                            (join (elt ,(if r
-                                            `(set! ,r (,clo-fptr ,clo-env . ,results))
-                                            `(,clo-fptr ,clo-env . ,results)))
+                            (join (join (elt (refcount-inc-one ,clo-env)) ;; REF: if we're giving one away we better inc
+                                        (elt ,(if r
+                                                  `(set! ,r (,clo-fptr ,clo-env . ,results))
+                                                  `(,clo-fptr ,clo-env . ,results))))
                                   (elt (refcount-dec-one ,clo-r)))))))))
     (`(,f . ,args) =>
      (begin (unless (symbol? f) (error (list "Invalid function call with head" f)))

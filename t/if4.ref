@@ -1,0 +1,6 @@
+(define (scm-main e)
+ (invoke-closure (scm-wrap-fptr f) "Hello" "World"))
+
+(define (f env x y)
+ (begin (invoke-closure (scm-wrap-fptr scm-print) x)
+        (invoke-closure (scm-wrap-fptr scm-print) y)))

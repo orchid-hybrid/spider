@@ -65,7 +65,7 @@
                         )
                  (begin)))
       (begin)))
-
+(define (void refcount-inc-one ((struct scm) s)) (refcount-inc s 1))
 (define (void refcount-inc ((struct scm) s) (int k))
   (declare int i)
   (declare (* (struct scm-vector)) v)
